@@ -1,0 +1,1 @@
+2025_hero_fric\startup_stm32f407xx.o: startup_stm32f407xx.s
