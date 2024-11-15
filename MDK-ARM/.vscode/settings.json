@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "telescope_task.h": "c",
-        "pid.h": "c"
+        "pid.h": "c",
+        "math_lib.h": "c"
     }
 }

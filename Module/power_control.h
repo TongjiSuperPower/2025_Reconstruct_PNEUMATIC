@@ -13,27 +13,34 @@
 #endif
 
 #define K1 2.892f
-#define K2 0.00681f
+#define K2 0.00821f
 #define K3 2.891f
 
+#define SPEED_CON 30
+#define W_CON 30
 
-//底盘功率限制函数
+//锟斤拷锟教癸拷锟斤拷锟斤拷锟狡猴拷锟斤拷
 void fn_chassis_power_control(Motor3508Data_t *Data1,Motor3508Data_t *Data2,Motor3508Data_t *Data3,Motor3508Data_t *Data4,fp32 Pmax);
 
-//分级控制功率
+//锟街硷拷锟斤拷锟狡癸拷锟斤拷
 fp32 fn_level_power_limit(fp32 infact_Pmax,uint16_t fact_buffer_energy);
 
-//判断是否利用缓存能量 三个参数分别为 裁判系统反馈的缓存能量值 裁判系统功率上限 可以使用的缓存能量
-fp32 fn_buffer_energy_judgement(uint16_t fact_buffer_energy,fp32 Pmax,fp32 USEmax);
+void fn_chassis_speed_autoset(fp32 *w_set,fp32 *vx_set,fp32 *vy_set,uint8_t mode);
 
-//计算使用了多少缓存能量 参数：计算频率 裁判系统功率上限
-void fn_buffer_energy_used(uint16_t fre,fp32 Pmax);
-
+//閫熷害閲嶇疆鍒ゆ柇
+bool_t fn_chassis_speed_reset_speed(fp32 infact_Pmax);
+//瑙掗�熷害閲嶇疆鍒ゆ柇
+bool_t fn_chassis_speed_reset_w(fp32 infact_Pmax);
 
 extern fp32 Pin;
+extern fp32 K;
 extern fp32 infact_Pmax;
 extern fp32 count_Pmax;
 extern fp32 filter_Pmax;
-extern fp32 used_buffer_energy;
+extern fp32 w_match;
+extern fp32 vx_match;
+extern fp32 vy_match;
+extern uint8_t speed_match_flag;
+extern uint8_t w_match_flag;
 
 #endif

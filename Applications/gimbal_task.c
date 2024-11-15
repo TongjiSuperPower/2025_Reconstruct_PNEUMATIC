@@ -114,7 +114,7 @@ void Gimbal_Task(void const * argument){
             fric_send_num = 0;
         }
         fric_send_num ++;
-			motor_mi_controlmode(gimbal_motormi_data[0].given_current,0,0,0,0);
+				motor_mi_controlmode(gimbal_motormi_data[0].given_current,0,0,0,0);
         //motor_mi_controlmode(0,0,0,0,0);
 				
 
@@ -203,7 +203,7 @@ void fn_GimbalMotorInit(void){
     gimbal_motor4310_data[0].round_num = 0;
     gimbal_motor4310_data[0].target_angle = 0.0f;
     gimbal_motor4310_data[0].target_torque = 0.0f;
-    gimbal_motor4310_data[0].offecd_angle = 1.12808f;
+    gimbal_motor4310_data[0].offecd_angle = -0.24904f;
 																			
 
     gimbal_motor4310_data[0].double_pid_mid = 0.0f;
@@ -334,7 +334,7 @@ void fn_GimbalMove(void){
 
         gimbal_motor4310_data[0].target_torque = 0.0f;
         if(gimbal_into_zero_force_time < 2000){
-            gimbal_motormi_data[0].given_current = sin(PI / 2.0f - OFFSET_ANGLE * PI + gimbal_motormi_data[0].relative_raw_angle) * Tor_param * 0.8;
+            gimbal_motormi_data[0].given_current = sin(PI / 2.0f - OFFSET_ANGLE * PI + gimbal_motormi_data[0].relative_raw_angle) * Tor_param * 0.7;
         }
         else{
             gimbal_motormi_data[0].given_current = 0.0f;
@@ -379,18 +379,18 @@ void fn_GimbalMove(void){
                     gimbal_data.gyro_pit_angle_add = MOUSE_Y_MOVE_SPEED * WCoef * 0.1f;
                     if(IF_KEY_PRESSED_W || IF_KEY_PRESSED_S){
                         if(IF_KEY_PRESSED_W){
-                            gimbal_data.gyro_pit_angle_add = WCoef * 5;
+                            gimbal_data.gyro_pit_angle_add = -WCoef;
                         }
                         else{
-                            gimbal_data.gyro_pit_angle_add = -WCoef * 5;
+                            gimbal_data.gyro_pit_angle_add = WCoef;
                         }
                     }
                     if(IF_KEY_PRESSED_A || IF_KEY_PRESSED_D){
                         if(IF_KEY_PRESSED_A){
-                            gimbal_data.gyro_yaw_angle_add = -WCoef * 10;
+                            gimbal_data.gyro_yaw_angle_add = WCoef * 2;
                         }
                         else{
-                            gimbal_data.gyro_yaw_angle_add = WCoef * 10;
+                            gimbal_data.gyro_yaw_angle_add = -WCoef * 2;
                         }
                     }
                 }
@@ -402,13 +402,11 @@ void fn_GimbalMove(void){
                 if(turnover_cold_time > 0){
                     turnover_cold_time--;
                 }
-                if(IF_KEY_PRESSED_Q && turnover_cold_time == 0){
-                    gimbal_data.gyro_yaw_angle_add += PI/2;
-                    turnover_cold_time = TurnOverColdTime;
+                if(IF_KEY_PRESSED_Q){
+                    gimbal_data.gyro_yaw_angle_add += WCoef * 70;
                 }
-                if(IF_KEY_PRESSED_E && turnover_cold_time == 0){
-                    gimbal_data.gyro_yaw_angle_add += -PI/2;
-                    turnover_cold_time = TurnOverColdTime;
+                if(IF_KEY_PRESSED_E){
+                    gimbal_data.gyro_yaw_angle_add += -WCoef * 70;
                 }
                 //按下X键回头
                 if(IF_KEY_PRESSED_X && turnover_cold_time == 0){

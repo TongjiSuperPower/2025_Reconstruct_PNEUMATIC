@@ -58,7 +58,7 @@ I (../Core/Inc/gpio.h)(0x67065D34)
 I (../Bsp/bsp_usart.h)(0x66F7B6D4)
 I (../Module/struct_typedef.h)(0x67065F44)
 I (../Module/remote_control.h)(0x6705002F)
-I (../Applications/gimbal_task.h)(0x67223464)
+I (../Applications/gimbal_task.h)(0x672A1AAB)
 I (../Algorithm/pid.h)(0x670FACE0)
 I (../Applications/referee_task.h)(0x67051B51)
 I (E:\keil\ARM\ARMCC\include\stdio.h)(0x5F63877C)
@@ -1198,7 +1198,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/task.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/list.h)(0x66E6EF63)
-F (..\Applications\buzzer_task.c)(0x67065AF8)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\buzzer_task.o --omf_browse 2025_hero_fric\buzzer_task.crf --depend 2025_hero_fric\buzzer_task.d)
+F (..\Applications\buzzer_task.c)(0x672A146B)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\buzzer_task.o --omf_browse 2025_hero_fric\buzzer_task.crf --depend 2025_hero_fric\buzzer_task.d)
 I (..\Applications\buzzer_task.h)(0x670624E3)
 I (../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h)(0x66E6EF63)
@@ -1251,13 +1251,13 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66E6F02F)
 I (../Core/Inc/gpio.h)(0x67065D34)
 I (..\Applications\calibrate_task.h)(0x670660E3)
 I (../Module/struct_typedef.h)(0x67065F44)
-I (..\Applications\gimbal_task.h)(0x67223464)
+I (..\Applications\gimbal_task.h)(0x672A1AAB)
 I (../Algorithm/pid.h)(0x670FACE0)
 F (..\Applications\calibrate_task.c)(0x67223439)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\calibrate_task.o --omf_browse 2025_hero_fric\calibrate_task.crf --depend 2025_hero_fric\calibrate_task.d)
 I (..\Applications\calibrate_task.h)(0x670660E3)
 I (../Module/struct_typedef.h)(0x67065F44)
 I (E:\keil\ARM\ARMCC\include\stdint.h)(0x5F63877C)
-I (..\Applications\gimbal_task.h)(0x67223464)
+I (..\Applications\gimbal_task.h)(0x672A1AAB)
 I (../Algorithm/pid.h)(0x670FACE0)
 I (../Module/remote_control.h)(0x6705002F)
 I (../Applications/referee_task.h)(0x67051B51)
@@ -1316,12 +1316,12 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h)(0x66E6EF63)
-F (..\Applications\chassis_task.c)(0x67223337)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\chassis_task.o --omf_browse 2025_hero_fric\chassis_task.crf --depend 2025_hero_fric\chassis_task.d)
-I (..\Applications\chassis_task.h)(0x67222212)
+F (..\Applications\chassis_task.c)(0x672A12BF)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\chassis_task.o --omf_browse 2025_hero_fric\chassis_task.crf --depend 2025_hero_fric\chassis_task.d)
+I (..\Applications\chassis_task.h)(0x6725E43A)
 I (../Module/struct_typedef.h)(0x67065F44)
 I (E:\keil\ARM\ARMCC\include\stdint.h)(0x5F63877C)
 I (../Algorithm/pid.h)(0x670FACE0)
-I (..\Applications\gimbal_task.h)(0x67223464)
+I (..\Applications\gimbal_task.h)(0x672A1AAB)
 I (../Algorithm/math_lib.h)(0x6705E97A)
 I (../Module/remote_control.h)(0x6705002F)
 I (../Applications/referee_task.h)(0x67051B51)
@@ -1381,7 +1381,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h)(0x66E6EF63
 I (../Module/can_task.h)(0x67124D24)
 I (..\Applications\detect_task.h)(0x6705E7E9)
 I (../Algorithm/filter.h)(0x66F8BE0F)
-I (../Module/power_control.h)(0x6722288C)
+I (../Module/power_control.h)(0x672A12BC)
 I (E:\keil\ARM\ARMCC\include\math.h)(0x5F63877C)
 I (..\Applications\supercap_task.h)(0x67066002)
 I (..\Applications\ins_task.h)(0x6705E530)
@@ -1392,7 +1392,7 @@ I (..\Applications\detect_task.h)(0x6705E7E9)
 I (../Module/struct_typedef.h)(0x67065F44)
 I (E:\keil\ARM\ARMCC\include\stdint.h)(0x5F63877C)
 I (../Module/remote_control.h)(0x6705002F)
-I (../Applications/gimbal_task.h)(0x67223464)
+I (../Applications/gimbal_task.h)(0x672A1AAB)
 I (../Algorithm/pid.h)(0x670FACE0)
 I (../Applications/referee_task.h)(0x67051B51)
 I (E:\keil\ARM\ARMCC\include\stdio.h)(0x5F63877C)
@@ -1451,8 +1451,8 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h)(0x66E6EF63)
 I (E:\keil\ARM\ARMCC\include\math.h)(0x5F63877C)
-F (..\Applications\gimbal_task.c)(0x6722DFBA)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\gimbal_task.o --omf_browse 2025_hero_fric\gimbal_task.crf --depend 2025_hero_fric\gimbal_task.d)
-I (..\Applications\gimbal_task.h)(0x67223464)
+F (..\Applications\gimbal_task.c)(0x672A1AAA)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\gimbal_task.o --omf_browse 2025_hero_fric\gimbal_task.crf --depend 2025_hero_fric\gimbal_task.d)
+I (..\Applications\gimbal_task.h)(0x672A1AAB)
 I (../Module/struct_typedef.h)(0x67065F44)
 I (E:\keil\ARM\ARMCC\include\stdint.h)(0x5F63877C)
 I (../Algorithm/pid.h)(0x670FACE0)
@@ -1518,7 +1518,7 @@ I (E:\keil\ARM\ARMCC\include\math.h)(0x5F63877C)
 I (..\Applications\detect_task.h)(0x6705E7E9)
 I (../Module/shoot_task.h)(0x6710A560)
 I (../Module/plot.h)(0x66F7B6D4)
-I (..\Applications\chassis_task.h)(0x67222212)
+I (..\Applications\chassis_task.h)(0x6725E43A)
 F (..\Applications\ins_task.c)(0x67066EA4)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\ins_task.o --omf_browse 2025_hero_fric\ins_task.crf --depend 2025_hero_fric\ins_task.d)
 I (..\Applications\ins_task.h)(0x6705E530)
 I (../Module/struct_typedef.h)(0x67065F44)
@@ -1576,7 +1576,7 @@ I (../Bsp/bsp_spi.h)(0x66F7B6D4)
 I (../Core/Inc/tim.h)(0x67065D36)
 I (../Core/Inc/stm32f4xx_it.h)(0x67067079)
 I (..\Applications\calibrate_task.h)(0x670660E3)
-I (..\Applications\gimbal_task.h)(0x67223464)
+I (..\Applications\gimbal_task.h)(0x672A1AAB)
 I (../Algorithm/math_lib.h)(0x6705E97A)
 I (E:\keil\ARM\ARMCC\include\math.h)(0x5F63877C)
 I (../Algorithm/filter.h)(0x66F8BE0F)
@@ -1632,7 +1632,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h)(0x66E6EF63)
 I (../Core/Inc/tim.h)(0x67065D36)
 I (..\Applications\calibrate_task.h)(0x670660E3)
-I (..\Applications\gimbal_task.h)(0x67223464)
+I (..\Applications\gimbal_task.h)(0x672A1AAB)
 I (../Algorithm/pid.h)(0x670FACE0)
 I (..\Applications\detect_task.h)(0x6705E7E9)
 I (../Module/can_task.h)(0x67124D24)
@@ -1696,12 +1696,12 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h)(0x66E6EF63)
 I (../Core/Inc/usart.h)(0x67065EBC)
 I (../Module/shoot_task.h)(0x6710A560)
-I (../Applications/gimbal_task.h)(0x67223464)
+I (../Applications/gimbal_task.h)(0x672A1AAB)
 I (../Algorithm/pid.h)(0x670FACE0)
 I (../Module/can_task.h)(0x67124D24)
 I (../Module/CRC8_CRC16.h)(0x66F7B6D4)
 I (E:\keil\ARM\ARMCC\include\stdbool.h)(0x5F63877C)
-I (..\Applications\chassis_task.h)(0x67222212)
+I (..\Applications\chassis_task.h)(0x6725E43A)
 I (..\Applications\supercap_task.h)(0x67066002)
 I (../Module/remote_control.h)(0x6705002F)
 F (..\Applications\supercap_task.c)(0x67106D56)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\supercap_task.o --omf_browse 2025_hero_fric\supercap_task.crf --depend 2025_hero_fric\supercap_task.d)
@@ -1710,7 +1710,7 @@ I (../Module/struct_typedef.h)(0x67065F44)
 I (E:\keil\ARM\ARMCC\include\stdint.h)(0x5F63877C)
 I (../Module/can_task.h)(0x67124D24)
 I (../Algorithm/pid.h)(0x670FACE0)
-I (../Applications/gimbal_task.h)(0x67223464)
+I (../Applications/gimbal_task.h)(0x672A1AAB)
 I (../Core/Inc/can.h)(0x67065D36)
 I (../Core/Inc/main.h)(0x67065D36)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66E6F02F)
@@ -1766,7 +1766,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h)(0x66E6EF63)
-I (..\Applications\chassis_task.h)(0x67222212)
+I (..\Applications\chassis_task.h)(0x6725E43A)
 F (..\Applications\telescope_task.c)(0x67072C73)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\telescope_task.o --omf_browse 2025_hero_fric\telescope_task.crf --depend 2025_hero_fric\telescope_task.d)
 I (..\Applications\telescope_task.h)(0x67072485)
 I (../Module/struct_typedef.h)(0x67065F44)
@@ -1789,7 +1789,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h)(0x66E6EF63)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h)(0x66E6EF63)
 I (../Module/can_task.h)(0x67124D24)
-I (../Applications/gimbal_task.h)(0x67223464)
+I (../Applications/gimbal_task.h)(0x672A1AAB)
 I (../Core/Inc/can.h)(0x67065D36)
 I (../Core/Inc/main.h)(0x67065D36)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66E6F02F)
@@ -1822,7 +1822,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x66E6F02F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x66E6F02F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x66E6F02F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66E6F02F)
-I (..\Applications\chassis_task.h)(0x67222212)
+I (..\Applications\chassis_task.h)(0x6725E43A)
 F (..\Module\BMI088driver.c)(0x66F7B6D4)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\bmi088driver.o --omf_browse 2025_hero_fric\bmi088driver.crf --depend 2025_hero_fric\bmi088driver.d)
 I (..\Module\BMI088driver.h)(0x66F7B6D4)
 I (..\Module\struct_typedef.h)(0x67065F44)
@@ -1902,7 +1902,7 @@ I (..\Module\can_task.h)(0x67124D24)
 I (..\Module\struct_typedef.h)(0x67065F44)
 I (E:\keil\ARM\ARMCC\include\stdint.h)(0x5F63877C)
 I (../Algorithm/pid.h)(0x670FACE0)
-I (../Applications/gimbal_task.h)(0x67223464)
+I (../Applications/gimbal_task.h)(0x672A1AAB)
 I (../Core/Inc/can.h)(0x67065D36)
 I (../Core/Inc/main.h)(0x67065D36)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66E6F02F)
@@ -2057,13 +2057,13 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x66E6F02F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x66E6F02F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x66E6F02F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66E6F02F)
-F (..\Module\power_control.c)(0x672228FF)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\power_control.o --omf_browse 2025_hero_fric\power_control.crf --depend 2025_hero_fric\power_control.d)
-I (..\Module\power_control.h)(0x6722288C)
+F (..\Module\power_control.c)(0x6725E8A0)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\power_control.o --omf_browse 2025_hero_fric\power_control.crf --depend 2025_hero_fric\power_control.d)
+I (..\Module\power_control.h)(0x672A12BC)
 I (..\Module\struct_typedef.h)(0x67065F44)
 I (E:\keil\ARM\ARMCC\include\stdint.h)(0x5F63877C)
 I (..\Module\can_task.h)(0x67124D24)
 I (../Algorithm/pid.h)(0x670FACE0)
-I (../Applications/gimbal_task.h)(0x67223464)
+I (../Applications/gimbal_task.h)(0x672A1AAB)
 I (../Core/Inc/can.h)(0x67065D36)
 I (../Core/Inc/main.h)(0x67065D36)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66E6F02F)
@@ -2097,7 +2097,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x66E6F02F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x66E6F02F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x66E6F02F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66E6F02F)
-I (../Applications/chassis_task.h)(0x67222212)
+I (../Applications/chassis_task.h)(0x6725E43A)
 I (E:\keil\ARM\ARMCC\include\math.h)(0x5F63877C)
 I (E:\keil\ARM\ARMCC\include\stdlib.h)(0x5F63877C)
 I (..\Module\remote_control.h)(0x6705002F)
@@ -2113,7 +2113,7 @@ F (..\Module\remote_control.c)(0x67053535)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0
 I (..\Module\remote_control.h)(0x6705002F)
 I (..\Module\struct_typedef.h)(0x67065F44)
 I (E:\keil\ARM\ARMCC\include\stdint.h)(0x5F63877C)
-I (../Applications/gimbal_task.h)(0x67223464)
+I (../Applications/gimbal_task.h)(0x672A1AAB)
 I (../Algorithm/pid.h)(0x670FACE0)
 I (../Applications/referee_task.h)(0x67051B51)
 I (E:\keil\ARM\ARMCC\include\stdio.h)(0x5F63877C)
@@ -2157,12 +2157,12 @@ I (E:\keil\ARM\ARMCC\include\stdlib.h)(0x5F63877C)
 I (../Module/protocol.h)(0x66F7B6D4)
 I (../Core/Inc/dma.h)(0x67065D36)
 I (../Core/Inc/usart.h)(0x67065EBC)
-I (../Applications/chassis_task.h)(0x67222212)
+I (../Applications/chassis_task.h)(0x6725E43A)
 F (..\Module\shoot_task.c)(0x6717984F)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Algorithm -I ../Applications -I ../Bsp -I ../Module-I.\RTE\_2025_HERO_FRIC-IE:\keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IE:\keil\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2025_hero_fric\shoot_task.o --omf_browse 2025_hero_fric\shoot_task.crf --depend 2025_hero_fric\shoot_task.d)
 I (..\Module\shoot_task.h)(0x6710A560)
 I (..\Module\struct_typedef.h)(0x67065F44)
 I (E:\keil\ARM\ARMCC\include\stdint.h)(0x5F63877C)
-I (../Applications/gimbal_task.h)(0x67223464)
+I (../Applications/gimbal_task.h)(0x672A1AAB)
 I (../Algorithm/pid.h)(0x670FACE0)
 I (..\Module\can_task.h)(0x67124D24)
 I (../Core/Inc/can.h)(0x67065D36)
@@ -2236,7 +2236,7 @@ I (E:\keil\ARM\ARMCC\include\stdint.h)(0x5F63877C)
 I (E:\keil\ARM\ARMCC\include\math.h)(0x5F63877C)
 I (../Module/can_task.h)(0x67124D24)
 I (../Algorithm/pid.h)(0x670FACE0)
-I (../Applications/gimbal_task.h)(0x67223464)
+I (../Applications/gimbal_task.h)(0x672A1AAB)
 I (../Core/Inc/can.h)(0x67065D36)
 I (../Core/Inc/main.h)(0x67065D36)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66E6F02F)

@@ -33,7 +33,7 @@
 
 //GYRO控制模式
 //Yaw陀螺仪双环外环pid参数-达妙
-#define GimbalPid1Yaw_kp 15.0f        //12 0.002 240     5000 0 1200
+#define GimbalPid1Yaw_kp 15.0f        //15 0 150
 #define GimbalPid1Yaw_ki 0.0f       //0.001
 #define GimbalPid1Yaw_kd 150.0f
 
@@ -94,7 +94,7 @@
 #define TurnOverColdTime 800            //ms
 
 //重力补偿力矩
-#define Tor_param 2.2f
+#define Tor_param 2.0f
 //重心偏移角
 #define OFFSET_ANGLE -0.1545f               //rad
 

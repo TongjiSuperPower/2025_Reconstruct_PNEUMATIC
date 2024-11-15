@@ -60,7 +60,7 @@ void Chassis_Task(void const * argument){
         while(remote_control_data_error_flag || rollover_flag){
             fn_cmd_CAN2ChassisMotor(0,0,0,0);
             fn_cmd_CAN2TriggerMotor(0,0,0,0);
-			fn_ctrl_DM_motor(0,0,0,0,0);
+					fn_ctrl_DM_motor(0,0,0,0,0);
 			vTaskDelay(100);
         }
 
@@ -91,7 +91,7 @@ void Chassis_Task(void const * argument){
 
         if(send_num > 49){
 			//plot4(gimbal_data.gyro_yaw_target_angle*57.3f,gimbal_data.gyro_pit_target_angle*57.3f,INS_eulers[0]*57.3f,INS_eulers[1]*57.3f);
-					//plot4(ext_power_heat_data.chassis_power,infact_Pmax,ext_power_heat_data.buffer_energy,Pin);
+					plot6(ext_power_heat_data.chassis_power,infact_Pmax,ext_power_heat_data.buffer_energy,Pin,w_match,K);
 					//plot3(INS_eulers[0],gimbal_motor4310_data[0].position,fn_RadFormat(INS_eulers[0]-gimbal_motor4310_data[0].position));
 					//plot6(ext_power_heat_data.chassis_power,infact_Pmax,ext_power_heat_data.buffer_energy,cap_data.Capacity,cap_data.Cell_Power,cap_data.Cap_Power);
 					//plot5(ext_power_heat_data.chassis_power,infact_Pmax,ext_power_heat_data.buffer_energy,cap_data.Capacity / 100.0f,cap_num);
@@ -106,7 +106,8 @@ void Chassis_Task(void const * argument){
 					//plot3(trigger_motor3508_data[0].target_angle,trigger_motor3508_data[0].relative_raw_angle,shoot_data.infact_shoot_speed);
           //plot2(chassis_motor3508_data[0].relative_raw_speed, 0);  
 					//plot4(INS_eulers[0],gimbal_data.gyro_pit_target_angle,INS_eulers[1],gimbal_data.gyro_yaw_target_angle);
-        }
+        send_num = 0;
+				}
         send_num++;
 
         vTaskDelay(1);
@@ -129,6 +130,10 @@ void fn_ChassisInit(void){
 	chassis_move_data.vy_set = 0.0f;
 	chassis_move_data.w_set = 0.0f;
     chassis_move_data.chassis_relative_angle_set = 0.0f;
+
+    w_match = SpinW;
+    vx_match = KeycontrolV;
+    vy_match = KeycontrolV;
 
     chassis_move_data.vx_max_speed = VxMaxSpeed;
 	chassis_move_data.vx_min_speed = VxMinSpeed;
@@ -264,15 +269,40 @@ void fn_ChassisMove(void){
         //键鼠模式
         if(IF_RC_SW2_MID){
             if(!IF_KEY_PRESSED_C){
+                static uint16_t match_T = 0;
+                static uint16_t speed_stable_t = 0;
+                //拟合角速度速度
+                if(fn_chassis_speed_reset_speed(infact_Pmax) || vx_match < 125.0f){
+                    vx_match = KeycontrolV;
+                    vy_match = KeycontrolV;
+                    speed_match_flag = 0;
+                    match_T = 0;
+                }
+                //速度稳定后再拟合
+                if(IF_KEY_PRESSED_W || IF_KEY_PRESSED_S){
+                    if(speed_stable_t < 2500){
+                        speed_stable_t ++;
+                    }
+                }
+                else{
+                    speed_stable_t = 0;
+                }
+                if(!speed_match_flag && match_T == 200 && !(IF_KEY_PRESSED_A || IF_KEY_PRESSED_D) && speed_stable_t == 2500){
+                    fn_chassis_speed_autoset(&w_match,&vx_match,&vy_match,2);
+		        	match_T = 0;
+                }
+		        if(match_T < 200 && !(IF_KEY_PRESSED_A || IF_KEY_PRESSED_D)){
+		        	match_T++;
+		        }
                 if(!(IF_KEY_PRESSED_W || IF_KEY_PRESSED_S)){
                     chassis_move_data.vx_set = 0.0f;
                 }
                 if(IF_KEY_PRESSED_W || IF_KEY_PRESSED_S){
                     if(IF_KEY_PRESSED_W){
-                        chassis_move_data.vx_set = KeycontrolCapV;
+                        chassis_move_data.vx_set = vx_match;
                     }
                     if(IF_KEY_PRESSED_S){
-                        chassis_move_data.vx_set = -KeycontrolV;
+                        chassis_move_data.vx_set = -vx_match;
                     }
                 }
                 if(!(IF_KEY_PRESSED_A || IF_KEY_PRESSED_D)){
@@ -280,10 +310,10 @@ void fn_ChassisMove(void){
                 }
                 if(IF_KEY_PRESSED_A || IF_KEY_PRESSED_D){
                     if(IF_KEY_PRESSED_A){
-                        chassis_move_data.vy_set = -KeycontrolV;
+                        chassis_move_data.vy_set = -vx_match;
                     }
                     if(IF_KEY_PRESSED_D){
-                        chassis_move_data.vy_set = KeycontrolV;
+                        chassis_move_data.vy_set = vx_match;
                     }
                 }
             }
@@ -411,51 +441,68 @@ void fn_ChassisMove(void){
     //底盘小陀螺模式
     if(chassis_move_data.chassis_mode == chassis_spin){
         //小陀螺角速度确定
-        static fp32 sum_w = 0;
-		if((chassis_move_data.vx_filter_set != 0.0f || chassis_move_data.vy_filter_set != 0.0f) && spin_w_flag){
-			spin_w_flag = 0;
-            relative_Pmax = 0.0f;
-		}
-        if(spin_w_flag == 0 && (relative_Pmax + infact_Pmax) / 2 != relative_Pmax 
-					 && chassis_move_data.vx_filter_set == 0.0f && chassis_move_data.vy_filter_set == 0.0f){
-            spin_w_flag = 1;
-            relative_Pmax = infact_Pmax;
-            sum_w = 0;
-            spin_w_count = 0;
-        }
-        if(spin_w_flag == 1 && spin_w_count < 3000){
-            spin_w_count++;
-        }
+//        static fp32 sum_w = 0;
+//		if((chassis_move_data.vx_filter_set != 0.0f || chassis_move_data.vy_filter_set != 0.0f) && spin_w_flag){
+//			spin_w_flag = 0;
+//            relative_Pmax = 0.0f;
+//		}
+//        if(spin_w_flag == 0 && (relative_Pmax + infact_Pmax) / 2 != relative_Pmax 
+//					 && chassis_move_data.vx_filter_set == 0.0f && chassis_move_data.vy_filter_set == 0.0f){
+//            spin_w_flag = 1;
+//            relative_Pmax = infact_Pmax;
+//            sum_w = 0;
+//            spin_w_count = 0;
+//        }
+//        if(spin_w_flag == 1 && spin_w_count < 3000){
+//            spin_w_count++;
+//        }
 
-        //2s加速等待
-        if(spin_w_count < 2000){
-            chassis_move_data.w_set = SpinW;
+//        //2s加速等待
+//        if(spin_w_count < 2000){
+//            chassis_move_data.w_set = SpinW;
+//        }
+//        //加速2s后记录1s观测数据
+//        else if(spin_w_count < 3000){
+//            sum_w += gimbal_motor4310_data[0].velocity - INS_gyro[2];
+//					chassis_move_data.w_set = SpinW;
+//        }
+//        //观测完毕
+//        else{
+//            if(-sum_w / 1000 < SpinW){
+//				if(1){
+//                    chassis_move_data.w_set = -sum_w / 1000 - 0.15f;
+//				}
+//				else{
+//					chassis_move_data.w_set = -(-sum_w / 1000 - 0.15f);
+//				}
+//            }
+//            else{
+//                if(1){
+//                    chassis_move_data.w_set = SpinW;
+//				}
+//				else{
+//					chassis_move_data.w_set = -SpinW;
+//				}
+//            }
+//            spin_w_flag = 0;
+//        }
+        static uint16_t match_T = 0;
+        //拟合角速度速度
+        if(fn_chassis_speed_reset_w(infact_Pmax)){
+            w_match = SpinW;
+            w_match_flag = 0;
+            match_T = 0;
         }
-        //加速2s后记录1s观测数据
-        else if(spin_w_count < 3000){
-            sum_w += gimbal_motor4310_data[0].velocity - INS_gyro[2];
-					chassis_move_data.w_set = SpinW;
+        if(!w_match_flag && match_T == ((uint16_t)(40 + infact_Pmax * 2)) && !(IF_KEY_PRESSED_A || IF_KEY_PRESSED_D || IF_KEY_PRESSED_W || IF_KEY_PRESSED_S)){
+            fn_chassis_speed_autoset(&w_match,&vx_match,&vy_match,1);
+			match_T = 0;
         }
-        //观测完毕
-        else{
-            if(-sum_w / 1000 < SpinW){
-				if(1){
-                    chassis_move_data.w_set = -sum_w / 1000 - 0.15f;
-				}
-				else{
-					chassis_move_data.w_set = -(-sum_w / 1000 - 0.15f);
-				}
-            }
-            else{
-                if(1){
-                    chassis_move_data.w_set = SpinW;
-				}
-				else{
-					chassis_move_data.w_set = -SpinW;
-				}
-            }
-            spin_w_flag = 0;
-        }
+		if(match_T < ((uint16_t)(40 + infact_Pmax * 2)) && !(IF_KEY_PRESSED_A || IF_KEY_PRESSED_D || IF_KEY_PRESSED_W || IF_KEY_PRESSED_S)){
+			match_T++;
+		}
+        
+        //赋值角速度
+        chassis_move_data.w_set = w_match;
 
         //平移速度
         if(IF_RC_SW2_MID){
@@ -469,7 +516,8 @@ void fn_ChassisMove(void){
                     fp32 vy_w,vy_s,vy_a,vy_d;
                     if(IF_KEY_PRESSED_W){
                         vx_w = SpinV * chassis_move_data.w_set / SpinW;
-                        vy_w = 0.8f * SpinV * chassis_move_data.w_set / SpinW;
+                        //vy_w = 0.8f * SpinV * chassis_move_data.w_set / SpinW;
+                        vy_w = 0.0f;
                     }
                     else{
                         vx_w = 0.0f;
@@ -477,14 +525,16 @@ void fn_ChassisMove(void){
                     }
                     if(IF_KEY_PRESSED_S){
                         vx_s = -SpinV * chassis_move_data.w_set / SpinW;
-                        vy_s = -0.8f *SpinV * chassis_move_data.w_set / SpinW;
+                        //vy_s = -0.8f *SpinV * chassis_move_data.w_set / SpinW;
+                        vy_s = 0.0f;
                     }
                     else{
                         vx_s = 0.0f;
                         vy_s = 0.0f;
                     }
                     if(IF_KEY_PRESSED_A){
-                        vx_a = 0.8f * SpinV * chassis_move_data.w_set / SpinW;
+                        //vx_a = 0.8f * SpinV * chassis_move_data.w_set / SpinW;
+                        vx_a = 0.0f;
                         vy_a = -SpinV * chassis_move_data.w_set / SpinW;
                     }
                     else{
@@ -492,7 +542,8 @@ void fn_ChassisMove(void){
                         vy_a = 0.0f;
                     }
                     if(IF_KEY_PRESSED_D){
-                        vx_d = -0.8f * SpinV * chassis_move_data.w_set / SpinW;
+                        //vx_d = -0.8f * SpinV * chassis_move_data.w_set / SpinW;
+                        vx_d = 0.0f;
                         vy_d = SpinV * chassis_move_data.w_set / SpinW;
                     }
                     else{

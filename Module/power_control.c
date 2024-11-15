@@ -14,16 +14,20 @@ fp32 Pin = 0.0f;
 fp32 K = 0.0f;              //缩放系数(-1,1)
 //缓存能量强制功率限制缩小系数(0,1)
 fp32 K_buffer = 0.0f;
-//是否使用缓存能量
-uint8_t buffer_energy_use_flag = 0;
-//预期已经使用的缓存能量
-fp32 used_buffer_energy = 0.0f;
 //实际最大功率
 fp32 infact_Pmax = 0.0f;
 //计算功率上限，即实际上限-（0，5）
 fp32 count_Pmax = 0.0f;
 //滤波后功率上限，目的是使得功率上限阶跃不会过大
 fp32 filter_Pmax = 0.0f;
+//拟合的加速度速度
+fp32 w_match;
+fp32 vx_match;
+fp32 vy_match;
+//是否拟合过速度的flag 为0则是未拟合过 为1则拟合过
+uint8_t speed_match_flag = 0;
+//是否拟合过角速度的flag 为0则是未拟合过 为1则拟合过
+uint8_t w_match_flag = 0;
 
 
 //底盘功率限制函数
@@ -88,6 +92,73 @@ void fn_chassis_power_control(Motor3508Data_t *Data1,Motor3508Data_t *Data2,Moto
     Data4->given_current = K_buffer * K * Data4->given_current;
 }
 
+//速度角速度再拟合，保证运动平稳性，每200ms更新一次 mode:0：三个全部拟合；1：拟合角速度；2：拟合前进速度
+void fn_chassis_speed_autoset(fp32 *w_set,fp32 *vx_set,fp32 *vy_set,uint8_t mode){
+    fp32 param = 1.0f;
+    switch (mode){
+        case 0:
+        {
+            *w_set = *w_set * param;
+            *vx_set = *vx_set * param;
+            *vy_set = *vy_set * param;
+            break;
+        }
+        case 1:
+        {
+            if(fabs(K) < 1 && K != 0.0f){
+                param = (fabs(K) + W_CON) / (1 + W_CON);
+            }
+            else{
+                param = 1.0f;
+            }
+            *w_set = *w_set * param;
+            if(K == 1){
+		        w_match_flag = 1;
+                *w_set += 0.3f;
+	        }
+            break;
+        }
+        case 2:
+        {
+            if(fabs(K) < 1 && K != 0.0f){
+                param = (fabs(K) + SPEED_CON) / (1 + SPEED_CON);
+            }
+            else{
+                param = 1.0f;
+            }
+            *vx_set = *vx_set * param;
+            if(K == 1){
+                speed_match_flag = 1;
+                *vx_set += 10.0f;
+            }
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+}
+
+//速度重置判断
+bool_t fn_chassis_speed_reset_speed(fp32 infact_Pmax){
+    static fp32 last_infact_Pmax = 0.0f;
+    if(last_infact_Pmax == infact_Pmax){
+        return 0;
+    }
+    last_infact_Pmax = infact_Pmax;
+    return 1;
+}
+//角速度重置判断
+bool_t fn_chassis_speed_reset_w(fp32 infact_Pmax){
+    static fp32 last_infact_Pmax = 0.0f;
+    if(last_infact_Pmax == infact_Pmax){
+        return 0;
+    }
+    last_infact_Pmax = infact_Pmax;
+    return 1;
+}
+
 //分级控制功率
 fp32 fn_level_power_limit(fp32 infact_Pmax,uint16_t fact_buffer_energy){
 	fn_Fp32Limit(&infact_Pmax,45.0f,CAP_MAX_POWER);
@@ -100,7 +171,7 @@ fp32 fn_level_power_limit(fp32 infact_Pmax,uint16_t fact_buffer_energy){
         return infact_Pmax - 4.0f;
     }
     else if(80.0f < infact_Pmax && infact_Pmax <= 120.0f){
-        return infact_Pmax - 0.0f;
+        return infact_Pmax - 3.0f;
     }
     else{
         return infact_Pmax;
