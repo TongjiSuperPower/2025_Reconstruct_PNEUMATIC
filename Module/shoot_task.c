@@ -12,8 +12,8 @@
 
 //射击的射频 发/S
 float shoot_speed;
-//射击模块数据
-shoot_data_t shoot_data;
+//射击模块实例化
+shoot_control_t shoot_control;
 //倒转时间
 uint16_t shoot_init_time;
 //倒转完成时间
@@ -32,16 +32,92 @@ uint16_t continue_shoot_mode_time;
 uint8_t continue_shoot_mode;
 //进入清弹模式的计时，摩擦轮打开左摇杆拨到下1s
 uint16_t clear_time;
+//光电门的状态临时变量,定义为全局变量方便debug
+GPIO_PinState photogate_state;
+//冷却时间？
+int32_t shoot_cooling_time = 0;
+//当前枪口热量
+uint16_t cooling_heat;
+//枪口热量上限
+uint16_t cooling_heat_limit;
 
-void fn_ShootMode(void);
+//射击状态机设置，遥控器上拨一次开启，再上拨关闭，下拨1次发射1颗
+void fn_Shoot_set_mode(void);
+
+//射击数据更新,更新拨弹轮速度和键鼠
+void fn_Shoot_feedback_update(void);
+
+//根据状态机计算被控量
+void fn_Shoot_action(void);
+
+//堵转倒转处理
+void fn_triggermotor_turn_back(void);
+
+//射击控制，控制拨弹电机角度，完成一次发射
+void fn_shoot_bullet_control(void);
+
+//f103控制任务
+void f103_control_loop(void);
+
+
+/**
+ * @brief          射击循环(！！！主函数！！！)
+ * @param[in]      void
+ * @retval         返回can控制值
+ */
+void fn_shoot_control_loop(void)
+{
+	fn_Shoot_set_mode();	//设置状态机
+	fn_Shoot_feedback_update();	//更新拨弹轮速度和键鼠
+	fn_Shoot_action();
+	f103_control_loop();
+	fn_cmd_F103(shoot_control.cylinder_cmd, shoot_control.quival_cmd, 0, 500);
+	
+}
+
+
+
+void f103_control_loop(void)
+{
+	if(shoot_control.shoot_mode == SHOOT_STOP)
+	{
+		shoot_control.cylinder_cmd = 0;
+		shoot_control.quival_cmd = 0;
+		return;
+	}
+
+	if(shoot_control.cylinder_mode == CYLIN_OPEN)
+	{
+		shoot_control.cylinder_cmd = 0;
+	}
+	else
+	{
+		shoot_control.cylinder_cmd = 1;
+	}
+
+	if(shoot_control.quickvalve_mode == QUIVAL_OPEN)
+	{
+		shoot_control.quival_cmd = 1;
+	}
+	else
+	{
+		shoot_control.quival_cmd = 0;
+	}
+}
+
 
 //拨弹轮初始化
-void fn_ShootMotorInit(void){
-	fp32 af_TriggerMotor3508PosPid1[3] = {TriggerMotor3508PosPid1_ID205_kp,TriggerMotor3508PosPid1_ID205_ki,TriggerMotor3508PosPid1_ID205_kd};
-	fp32 af_TriggerMotor3508PosPid2[3] = {TriggerMotor3508PosPid2_ID205_kp,TriggerMotor3508PosPid2_ID205_ki,TriggerMotor3508PosPid2_ID205_kd};
-    fp32 af_TriggerMotor3508PosPid3[3] = {TriggerMotor3508PosPid3_ID205_kp,TriggerMotor3508PosPid3_ID205_ki,TriggerMotor3508PosPid3_ID205_kd};
-    
+void fn_ShootMotorInit(void)
+{	
+	fp32 af_TriggerMotor3508_SpeedPid[3] = {TriggerMotor3508_SpeedPid_ID207_kp ,TriggerMotor3508_SpeedPid_ID207_ki ,TriggerMotor3508_SpeedPid_ID207_kd};
+	fp32 af_TriggerMotor3508_AnglePid[3] = {TriggerMotor3508_AnglePid_ID207_kp ,TriggerMotor3508_AnglePid_ID207_ki ,TriggerMotor3508_AnglePid_ID207_kd};
+	fp32 af_TriggerMotor3508_ActionSpeedPid[3] = {TriggerMotor3508_ActionSpeedPid_ID207_kp ,TriggerMotor3508_ActionSpeedPid_ID207_ki ,TriggerMotor3508_ActionSpeedPid_ID207_kd};
+	fp32 af_TriggerMotor3508_ActionAnglePid[3] = {TriggerMotor3508_ActionAnglePid_ID207_kp ,TriggerMotor3508_ActionAnglePid_ID207_ki ,TriggerMotor3508_ActionAnglePid_ID207_kd};
+	
+
     trigger_motor3508_data[0].round_num = 0;
+	trigger_motor3508_data[0].offecd_ecd = trigger_motor3508_measure[0].ecd;
+	/*以下暂时未使用到，仅初始化*/
     trigger_motor3508_data[0].relative_raw_angle = 0.0f;
 
 	for(uint8_t m = 0;m < 6;m++){
@@ -52,373 +128,327 @@ void fn_ShootMotorInit(void){
 		trigger_motor3508_data[0].filter_angle[n] = 0.0f;
 		trigger_motor3508_data[0].filter_speed[n] = 0.0f;
 	}
-
+	/*以上暂时未用到，仅初始化*/
     trigger_motor3508_data[0].relative_raw_speed = 0.0f;
-    trigger_motor3508_data[0].offecd_ecd = trigger_motor3508_measure[0].ecd;
 	trigger_motor3508_data[0].target_angle = 0.0f;
 	trigger_motor3508_data[0].target_speed = 0.0f;
 	trigger_motor3508_data[0].filter_given_current = 0.0f;
     trigger_motor3508_data[0].given_current = 0.0f;
     trigger_motor3508_data[0].double_pid_mid = 0.0f;
 
-	fn_PidInit(&trigger_motor3508_data[0].motor_pid1,af_TriggerMotor3508PosPid1,TriggerMotor3508SpeedMinOut,TriggerMotor3508SpeedMaxOut,TriggerMotor3508SpeedMinIOut,TriggerMotor3508SpeedMaxIOut);
-	fn_PidInit(&trigger_motor3508_data[0].motor_pid2,af_TriggerMotor3508PosPid2,TriggerMotor3508MinOut,TriggerMotor3508MaxOut,TriggerMotor3508MinIOut,TriggerMotor3508MaxIOut);
-    fn_PidInit(&trigger_motor3508_data[0].motor_pid3,af_TriggerMotor3508PosPid3,TriggerMotor3508MinOut,TriggerMotor3508MaxOut,TriggerMotor3508MinIOut,TriggerMotor3508MaxIOut);
-}
-
-//摩擦轮初始化
-void fn_shoot_motor3508_init(void){
-	fp32 af_GimbalMotor3508PosPid3[3][3] = {{GimbalMotor3508PosPid3_ID201_kp,GimbalMotor3508PosPid3_ID201_ki,GimbalMotor3508PosPid3_ID201_kd},
-	                                        {GimbalMotor3508PosPid3_ID202_kp,GimbalMotor3508PosPid3_ID202_ki,GimbalMotor3508PosPid3_ID202_kd},
-											{GimbalMotor3508PosPid3_ID203_kp,GimbalMotor3508PosPid3_ID203_ki,GimbalMotor3508PosPid3_ID203_kd}};
-
-	for(uint8_t i = 0;i < 3;i++){
-
-        gimbal_motor3508_data[i].round_num = 0;       
-        gimbal_motor3508_data[i].relative_raw_angle = 0.0f;
-
-	    for(uint8_t m = 0;m < 5;m++){
-            gimbal_motor3508_data[i].raw_angle[m] = 0.0f;
-		    gimbal_motor3508_data[i].raw_speed[m] = 0.0f; 
-	    }
-	    for(uint8_t n = 0;n < 2;n++){
-		    gimbal_motor3508_data[i].filter_angle[n] = 0.0f;
-		    gimbal_motor3508_data[i].filter_speed[n] = 0.0f;
-	    }
-
-        gimbal_motor3508_data[i].relative_raw_speed = 0.0f;                 
-        gimbal_motor3508_data[i].offecd_ecd = 0;   
-	    gimbal_motor3508_data[i].target_angle = 0.0f;
-		gimbal_motor3508_data[i].target_speed = 0.0f;    
-        gimbal_motor3508_data[i].given_current = 0.0f;           
-        gimbal_motor3508_data[i].double_pid_mid = 0.0f;
-		
-	    fn_PidInit(&gimbal_motor3508_data[i].motor_pid3,af_GimbalMotor3508PosPid3[i],GimbalMotor3508MinOut,GimbalMotor3508MaxOut,GimbalMotor3508MinIOut,GimbalMotor3508MaxIOut);
-
-	}
-}
-
-//射击模块状态初始化
-void fn_shoot_init(void){
-    shoot_init_time = 0;
-    shoot_init_over_time = 0;
-	shoot_continue_time = 0;
-	shoot_single_time_count = 0;
-	shooting_single_count = 0;
-	mode_time = ShootModeTime;
+	/*初始化pid*/
+	fn_PidInit(&shoot_control.trigger_speed_pid,af_TriggerMotor3508_SpeedPid,TriggerMotor3508MinOut,TriggerMotor3508MaxOut,TriggerMotor3508MinIOut,TriggerMotor3508MaxIOut);
+	fn_PidInit(&shoot_control.trigger_angle_pid,af_TriggerMotor3508_AnglePid,TriggerMotor3508MinOut,TriggerMotor3508MaxOut,TriggerMotor3508MinIOut,TriggerMotor3508MaxIOut);
+	fn_PidInit(&shoot_control.trigger_action_speed_pid,af_TriggerMotor3508_ActionSpeedPid,TriggerMotor3508MinOut,TriggerMotor3508MaxOut,TriggerMotor3508MinIOut,TriggerMotor3508MaxIOut);
+	fn_PidInit(&shoot_control.trigger_action_angle_pid,af_TriggerMotor3508_ActionAnglePid,-4.0 ,4.0,TriggerMotor3508MinIOut,TriggerMotor3508MaxIOut);
 	
-	continue_shoot_mode_time = 1000;
-	continue_shoot_mode = 0;
-
-	shoot_data.fric_state = FRIC_OFF;
-	shoot_data.shoot_mode = SHOOT_DOWN;
-
-    shoot_data.fric_speed = FricSpeed;
-	shoot_data.shoot_cold_time = ShootColdTime;
-
-	shoot_data.infact_shoot_speed = 0.0f;
-	shoot_data.last_infact_shoot_speed = 0.0f;
-
-	clear_time = 1000;
-
-	shoot_data.shoot_over_back_flag = 0;
-	shoot_data.first_shoot_flag = 1;
-	shoot_data.trigger_back_flag = 0;
-	shoot_data.shoot_permission_flag = 1;
-	shoot_data.fric_state_change_flag = 0;
-	shoot_data.shoot_over_flag = 1;
-	shoot_data.shoot_single_or_countinue_flag = 1;
-	shoot_data.double_shoot_flag = 0;
 }
 
 
+void fn_Shoot_set_mode(void)
+{
+	static int8_t last_s = RC_SW_UP; //上一时刻的左拨杆值
+	shoot_control.v_key = ctl.key.v & AUTOAIM_SHOOT_KEY;
+	photogate_state = HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_9);
+	shoot_control.photogate = (photogate_state == GPIO_PIN_SET);
+	
+	//右拨杆拨到下档则down
+	if(IF_RC_SW1_DOWN)
+	{
+		shoot_control.shoot_mode = SHOOT_STOP;
+	}
+	//整车不处在down模式
+	else
+	{
+		if(IF_RC_SW1_UP)//遥控器模式
+		{
+			//左拨杆中到上模式切换
+			if(IF_RC_SW2_UP && !switch_is_up(last_s) && shoot_control.shoot_mode == SHOOT_STOP)
+			{
+				shoot_control.shoot_mode = SHOOT_READY;
+			}
+			else if(IF_RC_SW2_UP && !switch_is_up(last_s) && shoot_control.shoot_mode != SHOOT_STOP)
+			{
+				shoot_control.shoot_mode = SHOOT_STOP;
+			}
+		}
+		else if(IF_RC_SW1_MID)//键鼠模式
+		{
+			shoot_control.shoot_mode = SHOOT_READY;
+		}
+		//如果云台状态是 无力状态，就关闭射击
+		if(gimbal_data.gimbal_behaviour == GIMBAL_ZERO_FORCE || gimbal_data.gimbal_behaviour == GIMBAL_INIT)
+		{
+			shoot_control.shoot_mode = SHOOT_STOP;
+		}
+		if((shoot_control.press_l && shoot_control.last_press_l == 0 ) ||
+		(autoaim_measure.shoot == 1 && autoaim_measure.vision_state != 0 && shoot_control.press_r && shoot_control.v_key))
+		{
+			shoot_control.shoot_enable_flag = 1;
+		}//左键发射或者右键自瞄的同时按V发射
+		shoot_cooling_time++;
+
+		// 在READY，并且拨盘停转、缸闭合的情况下如果下拨左拨杆，进入射击模式
+		if(((IF_RC_SW2_DOWN && !switch_is_down(last_s) && IF_RC_SW1_UP) ||(shoot_control.shoot_enable_flag && IF_RC_SW1_MID))
+		&& shoot_control.shoot_mode == SHOOT_READY && shoot_control.cylinder_mode == CYLIN_CLOSE && shoot_control.trigger_mode == TRIGGER_DOWN)
+		{
+			cooling_heat = ext_power_heat_data.shooter_42mm_barrel_heat;	//当前枪口热量
+			cooling_heat_limit = ext_robot_status.shooter_barrel_heat_limit;	//枪口热量上限
+
+			autoaim_measure.shoot = 0;
+			if(cooling_heat_limit - cooling_heat < 100.0)
+			{
+				return;
+			}
+			if(shoot_cooling_time<=8000)
+			{
+				autoaim_measure.shoot = 0;
+				return;
+			}
+			shoot_control.shoot_mode = SHOOT_BULLET;
+		}
+
+		// 1.如果进入READY模式
+		if(shoot_control.shoot_mode == SHOOT_READY)
+		{
+			// 如果光电门未检测到信号，则进入拨盘ACTION，否则拨盘不动
+			if(shoot_control.photogate != 1 && shoot_control.cylinder_mode == CYLIN_OPEN)
+			{
+				shoot_control.trigger_mode = TRIGGER_ACTION;
+
+				if(fabs(shoot_control.trigger_speed) <= BLOCK_TRIGGER_SPEED && shoot_control.block_time < BLOCK_TIME) //判断堵转时间
+				{
+					shoot_control.block_time++;
+					shoot_control.reverse_time = 0;	// 没有确定是堵转，则不发生反转，反转时间清零
+				}
+				if(shoot_control.block_time == BLOCK_TIME && shoot_control.reverse_time < REVERSE_TIME) //确定是堵转，开始记录反转时间
+				{
+					shoot_control.reverse_time++;
+					shoot_control.trigger_mode = TRIGGER_REVERSE;
+				}
+				if(shoot_control.reverse_time >= REVERSE_TIME && shoot_control.trigger_mode == TRIGGER_REVERSE)
+				{
+					shoot_control.block_time = 0;
+					shoot_control.reverse_time = 0;
+					shoot_control.trigger_mode = TRIGGER_ACTION;
+				}
+			}
+			else if(shoot_control.photogate == 1 && shoot_control.last_photogate != 1)
+			{
+				shoot_control.trigger_mode =TRIGGER_ACTION_PLUS; //拨弹轮拨弹完毕	
+			}
+			
+			if(shoot_control.trigger_mode == TRIGGER_ACTION_PLUS)
+			{
+				shoot_control.shoot_action_plus_count++;
+				if(shoot_control.shoot_action_plus_count >= 250)//检测到光电门信号后再转一下
+				{
+					shoot_control.shoot_action_plus_count = 0;
+					shoot_control.trigger_mode = TRIGGER_DOWN;
+				}
+			}
+
+			//如果拨盘停转同时光电门检测到物体，判断缸的模式
+			if(shoot_control.trigger_mode == TRIGGER_DOWN && shoot_control.photogate == 1)
+			{
+				//如果缸已经关闭，满足条件
+				if(shoot_control.cylinder_mode == CYLIN_CLOSE)
+				{}
+				//如果缸是打开状态，延时500ms，进入ACTION
+				if(shoot_control.cylinder_mode == CYLIN_OPEN)
+				{
+					shoot_control.cylin_open2action_count++;
+				}
+				if(shoot_control.cylin_open2action_count >= 500)
+				{
+					shoot_control.cylinder_mode = CYLIN_ACTION;
+					shoot_control.cylin_open2action_count = 0;
+				}
 
 
-//射击模块模式选择
-void fn_fric_state(void){
-	if(IF_RC_SW1_MID && !IF_MOUSE_PRESSED_LEFT && !IF_RC_SW2_DOWN){
-		shoot_data.fric_state_change_flag = 1;
+			}
+			// 如果现在是关闭进行中，延时500ms，进入close
+			if(shoot_control.trigger_mode == TRIGGER_DOWN)
+			{
+				if (shoot_control.cylinder_mode == CYLIN_ACTION)
+				{
+					shoot_control.cylin_action2close_count++;
+				}
+				if (shoot_control.cylin_action2close_count >= 500)
+				{
+					shoot_control.cylinder_mode = CYLIN_CLOSE;
+					shoot_control.cylin_action2close_count = 0;
+				}
+			}
+			// READY状态不开快排阀
+			shoot_control.quickvalve_mode = QUIVAL_CLOSE;
+		}
+
+		// 2.如果现在是BULLET模式，则打开快排阀
+		if(shoot_control.shoot_mode == SHOOT_BULLET)
+		{
+			shoot_control.quival_open2close_count++;
+			shoot_control.quickvalve_mode = QUIVAL_OPEN;
+			if(shoot_control.quival_open2close_count >= 50)
+			{
+				shoot_control.quickvalve_mode = QUIVAL_CLOSE;
+				shoot_control.cylin_close2open_count++;
+				if (shoot_control.cylin_close2open_count >= 500)
+				{
+					shoot_control.shoot_mode = SHOOT_STOP;
+					shoot_cooling_time = 0;
+					shoot_control.cylin_close2open_count = 0;
+					shoot_control.quival_open2close_count = 0;
+				}
+				
+			}
+		}
 	}
-	//摩擦轮状态选择
-	if(IF_RC_SW2_DOWN){
-		shoot_data.fric_state = FRIC_DOWN;
+
+	// 3.如果现在是STOP模式，则停止拨盘转动，同时快排阀关闭，缸打开
+	if (shoot_control.shoot_mode == SHOOT_STOP)
+	{
+		shoot_control.trigger_mode = TRIGGER_DOWN;
+		shoot_control.cylinder_mode = CYLIN_OPEN;
+		shoot_control.quickvalve_mode = QUIVAL_CLOSE;
+		shoot_control.block_time = 0;
+		shoot_control.reverse_time = 0;
+		shoot_control.shoot_enable_flag = 0;
 	}
-	if((shoot_data.fric_state == FRIC_OFF || shoot_data.fric_state == FRIC_DOWN) && (IF_RC_SW1_UP && shoot_data.fric_state_change_flag == 1) && !IF_RC_SW2_DOWN){
-        shoot_data.fric_state = FRIC_ON;
-		shoot_data.fric_state_change_flag = 0;
-	}
-	if(IF_RC_SW1_UP && shoot_data.fric_state == FRIC_ON && shoot_data.fric_state_change_flag == 1 && !IF_RC_SW2_DOWN){
-        shoot_data.fric_state = FRIC_OFF;
-		shoot_data.fric_state_change_flag = 0;
-	}
-    //射击模式选择
-	fn_ShootMode();
+
+	if (shoot_control.trigger_mode == TRIGGER_DOWN)
+	{
+		shoot_control.move_flag = 0;
+		shoot_control.block_time = 0;
+		shoot_control.reverse_time = 0;
+	}	
+
+	last_s = ctl.rc.s2;	//上一时刻的左拨杆值
+	shoot_control.last_photogate = shoot_control.photogate;
+	shoot_control.last_v_key = shoot_control.v_key;
+
 }
 
-//射击模式选择
-void fn_ShootMode(void){
-	//正在回转中不选择模式
-	if(shoot_data.trigger_back_flag){
+
+void fn_Shoot_action(void)
+{
+	if(shoot_control.shoot_mode == SHOOT_STOP)// stop模式代表gimbal出现某些问题，例如在遥控器down状态、校准阶段等，需要全面停止射击系统
+	{
+		shoot_control.given_current = 0;
 		return;
 	}
-	if(IF_RC_SW1_MID){
-		clear_time = 1000;
+	else if (shoot_control.trigger_mode == TRIGGER_DOWN)
+	{
+		if(shoot_control.angle_change_flag == 0)
+		{
+			shoot_control.trigger_angle_set = trigger_motor3508_data[0].relative_angle_19laps - PI_THREE * 0.65f;
+			shoot_control.angle_change_flag = 1;
+		}
+		shoot_control.trigger_speed_set = fn_delta_PidClac(&shoot_control.trigger_angle_pid, fn_RadFormat(trigger_motor3508_data[0].relative_angle_19laps), fn_RadFormat(shoot_control.trigger_angle_set), shoot_control.trigger_speed);
+		shoot_control.given_current = fn_PidClac(&shoot_control.trigger_speed_pid, shoot_control.trigger_speed, shoot_control.trigger_speed_set);
+		return;
 	}
-	if(shoot_data.fric_state == FRIC_ON && IF_RC_SW2_UP && IF_RC_SW1_DOWN && clear_time > 0){
-		clear_time--;
+	else if(shoot_control.trigger_mode == TRIGGER_REVERSE)
+	{
+		if(shoot_control.reverse_angle_change_flag == 0)
+		{
+			shoot_control.trigger_angle_set = trigger_motor3508_data[0].relative_angle_19laps - PI_THREE * 0.35f;
+			shoot_control.reverse_angle_change_flag = 1;
+		}
+		shoot_control.trigger_speed_set = fn_delta_PidClac(&shoot_control.trigger_angle_pid, fn_RadFormat(trigger_motor3508_data[0].relative_angle_19laps), fn_RadFormat(shoot_control.trigger_angle_set), shoot_control.trigger_speed);
+		shoot_control.given_current = fn_PidClac(&shoot_control.trigger_speed_pid, shoot_control.trigger_speed, shoot_control.trigger_speed_set);
+		shoot_control.move_flag = 0;
+		return;
 	}
-	if(IF_RC_SW2_UP && clear_time != 0){
-		shoot_data.shoot_single_or_countinue_flag = 0;
+	else if(shoot_control.trigger_mode == TRIGGER_ACTION || shoot_control.trigger_mode == TRIGGER_ACTION_PLUS)
+	{
+		shoot_control.trigger_angle_pid.f_MaxOut = 4.0f;	//？疑问
+		shoot_control.trigger_angle_pid.f_MaxIout = 0.5;
+		fn_shoot_bullet_control();
+		shoot_control.trigger_speed_set = fn_delta_PidClac(&shoot_control.trigger_action_angle_pid, fn_RadFormat(trigger_motor3508_data[0].relative_angle_19laps), fn_RadFormat(shoot_control.trigger_angle_set), shoot_control.trigger_speed);
+		shoot_control.given_current = fn_PidClac(&shoot_control.trigger_action_speed_pid, shoot_control.trigger_speed, shoot_control.trigger_speed_set);
+		shoot_control.angle_change_flag = 0;
+		shoot_control.reverse_angle_change_flag = 0;
 	}
-	if(IF_RC_SW2_UP && clear_time == 0){
-		shoot_data.shoot_single_or_countinue_flag = 2;
-	}
-	//单发转连发冷却倒计时
-	if(mode_time > 0){
-		mode_time--;
-	}
-	if(IF_RC_SW2_MID && mode_time == 0 && IF_KEY_PRESSED_Z && shoot_data.shoot_single_or_countinue_flag == 1){
-		shoot_data.shoot_single_or_countinue_flag = 0;
-		mode_time = ShootModeTime;
-	}
-	if(IF_RC_SW2_MID && mode_time == 0 && IF_KEY_PRESSED_Z && shoot_data.shoot_single_or_countinue_flag == 0){
-		shoot_data.shoot_single_or_countinue_flag = 1;
-		mode_time = ShootModeTime;
-	}
-	//射击模式选择
-	if(shoot_data.fric_state == FRIC_OFF || shoot_data.fric_state == FRIC_DOWN){
-		shoot_data.shoot_mode = SHOOT_DOWN;
-	}
-	if(shoot_data.fric_state == FRIC_ON && shoot_data.shoot_single_or_countinue_flag == 0){
-		shoot_data.shoot_mode = SHOOT_READY_SINGLE;
-	}
-	if(shoot_data.fric_state == FRIC_ON && shoot_data.shoot_single_or_countinue_flag == 1){
-		shoot_data.shoot_mode = SHOOT_READY_COUNTINUE;
-	}
-	if(shoot_data.fric_state == FRIC_ON && shoot_data.shoot_single_or_countinue_flag == 2){
-		shoot_data.shoot_mode = SHOOT_CLEAR;
-	}
-	//堵转反转模式
-	if(trigger_motor3508_block_flag){
-		shoot_data.shoot_mode = SHOOT_INIT;
-		shoot_data.trigger_back_flag = 1;
-		trigger_motor3508_data[0].target_angle = fn_RadFormat(trigger_motor3508_data[0].relative_raw_angle + TriggerBackAngle);
+
+}
+
+
+void fn_shoot_bullet_control(void)
+{
+	// 每次拨动大于 1/3PI 的角度，使弹丸一定能到达目标值
+	if(shoot_control.move_flag == 0)	// 置零表示可以改变目标角度，说明已进入过down模式，并且flag清零，可以开始下一次拨弹
+	{
+		shoot_control.trigger_angle_set = fn_RadFormat(trigger_motor3508_data[0].relative_angle_19laps) + PI_THREE * 8.0f / 3.0f;
+		shoot_control.move_flag = 1;	// 改变目标角度后即改变flag，防止在当前轮拨弹过程中目标值发生变化
 	}
 }
 
 
-//单发双环 连发单环
-//射击模块电流解算
-void fn_ShootMove(void){
-	//拨弹轮
-	//down
-    if(shoot_data.shoot_mode == SHOOT_DOWN){
-		shoot_continue_time = 0;
-	    mode_time = ShootModeTime;
-		shoot_data.shoot_cold_time = ShootColdTime;
-		shoot_data.shoot_over_flag = 1;
-		shoot_data.shoot_permission_flag = 0;
+void fn_shoot_init(void)
+{
 
-		trigger_motor3508_data[0].target_angle = trigger_motor3508_data[0].relative_raw_angle;
-		trigger_motor3508_data[0].target_speed = 0;
+	shoot_control.f103_data = fn_get_f103_data_point();//获取f103数据指针
+	fn_ShootMotorInit();//初始化拨弹轮3508电机
+	/*状态机初始化*/
+	shoot_control.shoot_mode = SHOOT_STOP;
+	shoot_control.trigger_mode = TRIGGER_DOWN;
+	shoot_control.cylinder_mode = CYLIN_OPEN;
+	shoot_control.quickvalve_mode = QUIVAL_CLOSE;
 
-		trigger_motor3508_data[0].given_current = 0;
-	}
+	fn_Shoot_feedback_update();//拨弹轮速度更新，鼠标按键更新
+	shoot_control.ecd_count = 0;
+	shoot_control.trigger_angle = trigger_motor3508_measure[0].ecd * MOTOR_ECD_TO_ANGLE19;
+	shoot_control.given_current = 0;
+	shoot_control.move_flag = 0;
+	shoot_control.move_flag2 = 0;
+	shoot_control.trigger_angle_set = trigger_motor3508_data[0].relative_angle_19laps;
+	shoot_control.trigger_speed = 0.0f;
+	shoot_control.trigger_speed_set = 0.0f;
+	shoot_control.key_time = 0;
+	shoot_control.v_key = 0;
+	shoot_control.last_v_key = 0;
+	shoot_control.last_shoot_flag = 0;
 
-	//单发模式
-	if(shoot_data.shoot_mode == SHOOT_READY_SINGLE){
-		//计时上一次射击持续时间
-		if(shoot_data.shoot_over_flag == 0){
-			shoot_continue_time++;
-		}
-		//判断上一次射击是否完成
-		if(shoot_continue_time > 149){
-			shoot_data.shoot_over_flag = 1;
-			shoot_data.shoot_over_back_flag = 1;
-			shoot_continue_time = 0;
-		}
-		//上次射击完成则开始减少冷却
-		if(shoot_data.shoot_over_flag == 1){
-			if(shoot_data.shoot_cold_time > 0){
-			    shoot_data.shoot_cold_time--;
-			}
-		}
-		//单发模式下 左摇杆拨到中间且松掉鼠标左键同时冷却时间为0则给予射击权限
-		if(shoot_data.shoot_cold_time == 0 && IF_RC_SW1_MID && !IF_MOUSE_PRESSED_LEFT){  // && (ext_robot_status.shooter_barrel_heat_limit - ext_power_heat_data.shooter_42mm_barrel_heat) >= 100
-		    shoot_data.shoot_permission_flag = 1;
-		}
-		//判断是否满足射击要求
-		if((IF_RC_SW1_DOWN || IF_MOUSE_PRESSED_LEFT) && shoot_data.shoot_permission_flag == 1){
-			trigger_motor3508_data[0].target_angle = fn_RadFormat(trigger_motor3508_data[0].target_angle - ShootAngleAdd - ShootAngleAdd_addition);
-			//shoot_continue_time = 0;
-			shoot_data.shoot_permission_flag = 0;
-			shoot_data.shoot_over_flag = 0;
-			shoot_data.shoot_cold_time = ShootColdTime;
-		}
-		if(shoot_data.shoot_over_back_flag){
-			trigger_motor3508_data[0].target_angle = fn_RadFormat(trigger_motor3508_data[0].target_angle + ShootAngleAdd_addition);
-			shoot_data.shoot_over_back_flag = 0;
-		}
-		//单发模式下速度设为0
-		trigger_motor3508_data[0].target_speed = 0;
+	shoot_control.cylin_open2action_count = 0;
+	shoot_control.cylin_action2close_count = 0;
+	shoot_control.cylin_close2open_count = 0;
+	shoot_control.quival_open2close_count = 0;
+	shoot_control.shoot_action_plus_count = 0;
+	shoot_control.angle_change_flag = 0;
+	shoot_control.reverse_angle_change_flag = 0;
+	shoot_control.cylinder_cmd = 0;
+	shoot_control.quival_cmd = 0;
+	shoot_control.last_photogate = 0;
+	shoot_control.photogate = 0;
 
-		//单发模式下拨弹轮电流计算
-		trigger_motor3508_data[0].double_pid_mid = fn_PidClacAngle(&trigger_motor3508_data[0].motor_pid1,
-		                                                           trigger_motor3508_data[0].relative_raw_angle,trigger_motor3508_data[0].target_angle);
-		trigger_motor3508_data[0].given_current = fn_PidClac(&trigger_motor3508_data[0].motor_pid2,
-		                                                     trigger_motor3508_data[0].relative_raw_speed,trigger_motor3508_data[0].double_pid_mid);
-	
-	    //双发检测
-		if(shoot_data.double_shoot_flag == 0 && shoot_data.shoot_over_flag == 0){
-			shoot_data.double_shoot_flag = 1;
-		}
-		if(shoot_data.double_shoot_flag == 1){
-			float speed = 0;
-			speed = (fabs(gimbal_motor3508_data[0].relative_raw_speed) + fabs(gimbal_motor3508_data[1].relative_raw_speed)) / 2.0f;
-			//判断第一发
-			if(speed < (FricSpeed - FricSpeedReduce) && shooting_single_count < 10){
-				shooting_single_count++;
-			}
-			//第一发已经射击完成
-			if(shooting_single_count == 10 && speed > (FricSpeed - FricSpeedReduce + 5.0f)){
-				shooting_single_count++;
-			}
-			//判断第二发
-			if(shooting_single_count >= 11 && speed < (FricSpeed - FricSpeedReduce) && shooting_single_count < 21){
-				shooting_single_count++;
-			}
-		}
-		//更新计数器
-		if(shoot_data.double_shoot_flag == 1 && shoot_single_time_count < DetectTime){
-			shoot_single_time_count++;
-			
-		}
-		//检测到双发结束
-		if(shooting_single_count == 21 && shoot_data.shoot_over_flag == 1){
-			trigger_motor3508_block_flag = 1;
-			shoot_single_time_count = 0;
-			shoot_data.double_shoot_flag = 0;
-			shooting_single_count = 0;
-		}
-		//检测超时结束
-		if(shooting_single_count != 21 && shoot_single_time_count == DetectTime){
-			shoot_data.double_shoot_flag = 0;
-			shoot_single_time_count = 0;
-			shooting_single_count = 0;
-		}
-	}
+	shoot_control.block_time = 0;
+	shoot_control.reverse_time = 0;
 
-	//自爆模式
-	if(shoot_data.shoot_mode == SHOOT_READY_COUNTINUE){
-        //射击
-		if(IF_MOUSE_PRESSED_LEFT){
-			trigger_motor3508_data[0].target_speed = 5.0f;
-	    }
-		//未射击
-		if(!IF_MOUSE_PRESSED_LEFT){
-			trigger_motor3508_data[0].target_speed = 0.0f;
-		}
-
-        //连发模式下将角度目标值永远等于现在值，保证切换回单发模式的连续性
-		trigger_motor3508_data[0].target_angle = trigger_motor3508_data[0].relative_raw_angle;
-
-		//连发模式电流计算
-		trigger_motor3508_data[0].given_current = fn_Iclear_PidClac(&trigger_motor3508_data[0].motor_pid3,
-		                                                     trigger_motor3508_data[0].relative_raw_speed,trigger_motor3508_data[0].target_speed);
-	}
-
-	if(shoot_data.shoot_mode == SHOOT_CLEAR){
-		trigger_motor3508_data[0].target_speed = -10.0f;
-
-		//清弹模式下将角度目标值永远等于现在值，保证切换回单发模式的连续性
-		trigger_motor3508_data[0].target_angle = trigger_motor3508_data[0].relative_raw_angle;
-
-		//清弹模式电流计算
-		trigger_motor3508_data[0].given_current = fn_PidClac(&trigger_motor3508_data[0].motor_pid3,
-		                                                     trigger_motor3508_data[0].relative_raw_speed,trigger_motor3508_data[0].target_speed);
-	}
-
-	//拨弹轮初始化模式
-	if(shoot_data.shoot_mode == SHOOT_INIT){
-
-        if(fabs(trigger_motor3508_data[0].target_angle - trigger_motor3508_data[0].relative_raw_angle) < 0.05f){
-			shoot_init_over_time++;
-		}
-
-        shoot_init_time++;
-
-		if(shoot_init_time > 500 || shoot_init_over_time > 50){
-			trigger_motor3508_data[0].target_angle = trigger_motor3508_data[0].relative_raw_angle;
-            shoot_init_over_time = 0;
-			shoot_init_time = 0;
-			shoot_data.trigger_back_flag = 0;
-			trigger_motor3508_block_flag = 0;
-		}
-
-		trigger_motor3508_data[0].target_speed = 0.0f;
-
-		trigger_motor3508_data[0].double_pid_mid = fn_Iclear_PidClacAngle(&trigger_motor3508_data[0].motor_pid1,
-		                                                           trigger_motor3508_data[0].relative_raw_angle,trigger_motor3508_data[0].target_angle);
-		trigger_motor3508_data[0].given_current = fn_PidClac(&trigger_motor3508_data[0].motor_pid2,
-		                                                     trigger_motor3508_data[0].relative_raw_speed,trigger_motor3508_data[0].double_pid_mid);
-	}
-
-	//摩擦轮
-	if(shoot_data.fric_state == FRIC_DOWN){
-		gimbal_motor3508_data[0].target_speed = 0.0f;
-		gimbal_motor3508_data[1].target_speed = 0.0f;
-		gimbal_motor3508_data[2].target_speed = 0.0f;
-        gimbal_motor3508_data[0].given_current = 0;
-		gimbal_motor3508_data[1].given_current = 0;
-		gimbal_motor3508_data[2].given_current = 0;
-	}
-
-	if(shoot_data.fric_state == FRIC_OFF){
-		gimbal_motor3508_data[0].target_speed = 0.0f;
-		gimbal_motor3508_data[1].target_speed = 0.0f;
-		gimbal_motor3508_data[2].target_speed = 0.0f;
-		//摩擦轮电流计算
-        gimbal_motor3508_data[0].given_current = fn_PidClac(&gimbal_motor3508_data[0].motor_pid3,
-		                                                     gimbal_motor3508_data[0].relative_raw_speed,gimbal_motor3508_data[0].target_speed);
-		gimbal_motor3508_data[1].given_current = fn_PidClac(&gimbal_motor3508_data[1].motor_pid3,
-		                                                     gimbal_motor3508_data[1].relative_raw_speed,gimbal_motor3508_data[1].target_speed);
-		gimbal_motor3508_data[2].given_current = fn_PidClac(&gimbal_motor3508_data[2].motor_pid3,
-		                                                     gimbal_motor3508_data[2].relative_raw_speed,gimbal_motor3508_data[2].target_speed);
-	}
-	
-	if(shoot_data.fric_state == FRIC_ON){
-		//赋予摩擦轮速度
-		//if(shoot_data.shoot_mode == SHOOT_READY_SINGLE || shoot_data.shoot_mode == SHOOT_CLEAR){
-		//    gimbal_motor3508_data[0].target_speed = shoot_data.fric_speed;
-		//    gimbal_motor3508_data[1].target_speed = -shoot_data.fric_speed;
-		//}
-		//else if(shoot_data.shoot_mode == SHOOT_READY_COUNTINUE){
-		//	gimbal_motor3508_data[0].target_speed = shoot_data.fric_speed - 50.0f;
-		//    gimbal_motor3508_data[1].target_speed = -shoot_data.fric_speed - 50.0f;
-		//}
-
-		//超射速自动减少摩擦轮转速
-		shoot_data.last_infact_shoot_speed = shoot_data.infact_shoot_speed;
-		get_shoot_speed(&shoot_data.infact_shoot_speed);
-		if(shoot_data.infact_shoot_speed != shoot_data.last_infact_shoot_speed && shoot_data.infact_shoot_speed > 29.4f && IF_MOUSE_PRESSED_LEFT){
-            shoot_data.fric_speed -= 40.0f;
-		}
-		else if(shoot_data.last_infact_shoot_speed == shoot_data.infact_shoot_speed && !IF_MOUSE_PRESSED_LEFT){
-			shoot_data.fric_speed = FricSpeed;
-		}
-		fn_Fp32Limit(&shoot_data.fric_speed,200.0f,1000.0f);
-
-		gimbal_motor3508_data[0].target_speed = -shoot_data.fric_speed;
-		gimbal_motor3508_data[1].target_speed = shoot_data.fric_speed;
-		gimbal_motor3508_data[2].target_speed = -shoot_data.fric_speed;
-		
-		
-		//摩擦轮电流计算
-        gimbal_motor3508_data[0].given_current = fn_PidClac(&gimbal_motor3508_data[0].motor_pid3,
-		                                                     gimbal_motor3508_data[0].relative_raw_speed,gimbal_motor3508_data[0].target_speed);
-		gimbal_motor3508_data[1].given_current = fn_PidClac(&gimbal_motor3508_data[1].motor_pid3,
-		                                                     gimbal_motor3508_data[1].relative_raw_speed,gimbal_motor3508_data[1].target_speed);
-	    gimbal_motor3508_data[2].given_current = fn_PidClac(&gimbal_motor3508_data[2].motor_pid3,
-		                                                     gimbal_motor3508_data[2].relative_raw_speed,gimbal_motor3508_data[2].target_speed);
-	}
+	shoot_control.shoot_enable_flag = 0;
 }
+
+void fn_Shoot_feedback_update(void)
+{
+	static fp32 speed_fliter_1 = 0.0f;
+	static fp32 speed_fliter_2 = 0.0f;
+	static fp32 speed_fliter_3 = 0.0f;
+
+	// 拨弹轮电机速度滤波一下
+	static const fp32 fliter_num[3] = {1.725709860247969f, -0.75594777109163436f, 0.030237910843665373f};
+
+	// 二阶低通滤波
+	speed_fliter_1 = speed_fliter_2;
+	speed_fliter_2 = speed_fliter_3;
+	speed_fliter_3 = speed_fliter_2 * fliter_num[0] + speed_fliter_1 * fliter_num[1] + (trigger_motor3508_measure[0].speed_rpm * TriggerMotor3508_RPM_TO_SPEED) * fliter_num[2];
+	shoot_control.trigger_speed = speed_fliter_3;
+
+	//鼠标按键
+	shoot_control.last_press_l = shoot_control.press_l;
+	shoot_control.last_press_r = shoot_control.press_r;
+	shoot_control.press_l = ctl.mouse.press_l;
+	shoot_control.press_r = ctl.mouse.press_r; 
+
+}
+
+

@@ -37,6 +37,8 @@ void sbus_to_rc(volatile const uint8_t *sbus_buf, Rc_ctrl *rc_ctrl)
     ctl.mouse.press_l = sbus_buf[12];                                  //!< Mouse Left Is Press
     ctl.mouse.press_r = sbus_buf[13];                                  //!< Mouse Right Is Press
     ctl.key.v = sbus_buf[14] | (sbus_buf[15] << 8);                    //!< KeyBoard value
+
+    ctl.rc.k0 = (sbus_buf[16] | (sbus_buf[17] << 8));                  //左前方旋钮
 	
     //中心死区
     if(ctl.rc.ch1 - RC_CH_VALUE_OFFSET < ZeroCh && ctl.rc.ch1 - RC_CH_VALUE_OFFSET > -ZeroCh){

@@ -13,10 +13,12 @@ typedef struct
 {
 struct
 {
+	unsigned short k0;
 	unsigned short ch0;
 	unsigned short ch1;
 	unsigned short ch2;
 	unsigned short ch3;
+	unsigned short ch4;//×óÉÏ½Ç¹öÂÖ
 	unsigned char s1;
 	unsigned char s2;
   
@@ -39,7 +41,7 @@ struct
 
 }Rc_ctrl;
 
-//Ò£¸ÐÖÐÐÄËÀÇø
+//Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define ZeroCh ((uint16_t)50)
 
 /* ----------------------- RC Channel Definition---------------------------- */
@@ -54,6 +56,9 @@ struct
 #define    RC_SW_UP              ((uint16_t)1)
 #define    RC_SW_MID             ((uint16_t)3)
 #define    RC_SW_DOWN            ((uint16_t)2)
+#define switch_is_down(s)       (s == RC_SW_DOWN)
+#define switch_is_mid(s)        (s == RC_SW_MID)
+#define switch_is_up(s)         (s == RC_SW_UP)
 
 
 /* ----------------------- PC Key Definition-------------------------------- */
@@ -75,38 +80,38 @@ struct
 #define    KEY_PRESSED_OFFSET_V        ((uint16_t)0x01<<14)
 #define    KEY_PRESSED_OFFSET_B        ((uint16_t)0x01<<15)
 
-/* »ñÈ¡Ò£¿ØÆ÷Ò¡¸ËÆ«ÒÆÖµ 
-   RLR£ºÓÒÒ¡¸Ë×óÓÒÒÆ¶¯  LUD£º×óÒ¡¸ËÉÏÏÂÒÆ¶¯	*/
+/* ï¿½ï¿½È¡Ò£ï¿½ï¿½ï¿½ï¿½Ò¡ï¿½ï¿½Æ«ï¿½ï¿½Öµ 
+   RLRÊÇÓÒÒ£¸Ë×óÓÒ  LUDÊÇ×óÒ¡¸ËÇ°ºó	*/
 #define    RC_CH0_RLR_OFFSET    (ctl.rc.ch0 - RC_CH_VALUE_OFFSET)
 #define    RC_CH1_RUD_OFFSET  	(ctl.rc.ch1 - RC_CH_VALUE_OFFSET)
 #define    RC_CH2_LLR_OFFSET  	(ctl.rc.ch2 - RC_CH_VALUE_OFFSET)
 #define    RC_CH3_LUD_OFFSET  	(ctl.rc.ch3 - RC_CH_VALUE_OFFSET)
 
 
-/* ¼ì²âÒ£¿ØÆ÷¿ª¹Ø×´Ì¬ */
-#define    IF_RC_SW1_UP      (ctl.rc.s1 == RC_SW_UP)
-#define    IF_RC_SW1_MID     (ctl.rc.s1 == RC_SW_MID)
-#define    IF_RC_SW1_DOWN    (ctl.rc.s1 == RC_SW_DOWN)
-#define    IF_RC_SW2_UP      (ctl.rc.s2 == RC_SW_UP)
-#define    IF_RC_SW2_MID     (ctl.rc.s2 == RC_SW_MID)
-#define    IF_RC_SW2_DOWN    (ctl.rc.s2 == RC_SW_DOWN)
+/* sw1ÊÇÓÒ²¦¸Ë£¬sw2ÊÇ×ó²¦¸Ë */
+#define    IF_RC_SW1_UP      (ctl.rc.s1 == RC_SW_UP)  //ÓÒ²¦¸ËÉÏ
+#define    IF_RC_SW1_MID     (ctl.rc.s1 == RC_SW_MID) //ÓÒ²¦¸ËÖÐ
+#define    IF_RC_SW1_DOWN    (ctl.rc.s1 == RC_SW_DOWN)	//ÓÒ²¦¸Ëdown
+#define    IF_RC_SW2_UP      (ctl.rc.s2 == RC_SW_UP)	//×ó²¦¸ËÉÏ
+#define    IF_RC_SW2_MID     (ctl.rc.s2 == RC_SW_MID)	//×ó²¦¸ËÖÐ
+#define    IF_RC_SW2_DOWN    (ctl.rc.s2 == RC_SW_DOWN)	//×ó²¦¸Ëdown
 
 #ifdef KEY_MOD_1
 
-/* »ñÈ¡Êó±êÈýÖáµÄÒÆ¶¯ËÙ¶È */
+/* ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½Ù¶ï¿½ */
 #define    MOUSE_X_MOVE_SPEED    (ctl.mouse.x)
 #define    MOUSE_Y_MOVE_SPEED    (ctl.mouse.y)
 #define    MOUSE_Z_MOVE_SPEED    (ctl.mouse.z)
 
 
-/* ¼ì²âÊó±ê°´¼ü×´Ì¬ 
-   °´ÏÂÎª1£¬Ã»°´ÏÂÎª0*/
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ê°´ï¿½ï¿½×´Ì¬ 
+   ï¿½ï¿½ï¿½ï¿½Îª1ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Îª0*/
 #define    IF_MOUSE_PRESSED_LEFT    (ctl.mouse.press_l == 1)
 #define    IF_MOUSE_PRESSED_RIGHT    (ctl.mouse.press_r == 1)
 
 
-/* ¼ì²â¼üÅÌ°´¼ü×´Ì¬ 
-   Èô¶ÔÓ¦°´¼ü±»°´ÏÂ£¬ÔòÂß¼­±í´ïÊ½µÄÖµÎª1£¬·ñÔòÎª0 */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½Ì°ï¿½ï¿½ï¿½×´Ì¬ 
+   ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ÖµÎª1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª0 */
 #define    IF_KEY_PRESSED         (  ctl.key.v  )
 #define    IF_KEY_PRESSED_W       ( (ctl.key.v & KEY_PRESSED_OFFSET_W)    != 0 )
 #define    IF_KEY_PRESSED_S       ( (ctl.key.v & KEY_PRESSED_OFFSET_S)    != 0 )
@@ -129,20 +134,20 @@ struct
 
 #ifdef KEY_MOD_2
 
-/* »ñÈ¡Êó±êÈýÖáµÄÒÆ¶¯ËÙ¶È */
+/* ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½Ù¶ï¿½ */
 #define    MOUSE_X_MOVE_SPEED    (ext_robot_command.mouse_x)
 #define    MOUSE_Y_MOVE_SPEED    (ext_robot_command.mouse_y)
 #define    MOUSE_Z_MOVE_SPEED    (ext_robot_command.mouse_z)
 
 
-/* ¼ì²âÊó±ê°´¼ü×´Ì¬ 
-   °´ÏÂÎª1£¬Ã»°´ÏÂÎª0*/
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ê°´ï¿½ï¿½×´Ì¬ 
+   ï¿½ï¿½ï¿½ï¿½Îª1ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Îª0*/
 #define    IF_MOUSE_PRESSED_LEFT    (ext_robot_command.left_button_down == 1)
 #define    IF_MOUSE_PRESSED_RIGHT    (ext_robot_command.right_button_down == 1)
 
 
-/* ¼ì²â¼üÅÌ°´¼ü×´Ì¬ 
-   Èô¶ÔÓ¦°´¼ü±»°´ÏÂ£¬ÔòÂß¼­±í´ïÊ½µÄÖµÎª1£¬·ñÔòÎª0 */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½Ì°ï¿½ï¿½ï¿½×´Ì¬ 
+   ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ÖµÎª1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª0 */
 #define    IF_KEY_PRESSED         (  ext_robot_command.keyboard_value  )
 #define    IF_KEY_PRESSED_W       ( (ext_robot_command.keyboard_value & KEY_PRESSED_OFFSET_W)    != 0 )
 #define    IF_KEY_PRESSED_S       ( (ext_robot_command.keyboard_value & KEY_PRESSED_OFFSET_S)    != 0 )

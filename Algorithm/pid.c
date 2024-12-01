@@ -25,6 +25,30 @@ void fn_PidInit(pid_type_def *pid,const fp32 PID[3],fp32 min_out,fp32 max_out,fp
 	pid->f_Out = 0;
 }
 
+
+//计算位置环时把速度当成微分输入
+fp32 fn_delta_PidClac(pid_type_def *pid, fp32 ref, fp32 set, fp32 error_delta)
+{
+	if(pid == NULL)
+		return 0.0f;
+	pid->f_Error = set - ref;
+	pid->f_Set = set;
+	pid->f_Fdb = ref;
+	
+	pid->f_Pout = pid->f_Kp * pid->f_Error;
+	pid->f_Iout += pid->f_Ki * pid->f_Error;
+	pid->f_Dout = pid->f_Kd * error_delta;
+
+	fn_Fp32Limit(&pid->f_Iout,pid->f_MinIout,pid->f_MaxIout);
+	
+	pid->f_Out=pid->f_Pout + pid->f_Iout + pid->f_Dout;
+	
+	fn_Fp32Limit(&pid->f_Out,pid->f_MinOut,pid->f_MaxOut);
+	
+	return pid->f_Out;
+
+}
+
 //PID计算
 fp32 fn_PidClac(pid_type_def *pid,fp32 ref,fp32 set){
 	

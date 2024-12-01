@@ -1,12 +1,12 @@
 2025_hero_fric\telescope_task.o: ..\Applications\telescope_task.c
 2025_hero_fric\telescope_task.o: ..\Applications\telescope_task.h
 2025_hero_fric\telescope_task.o: ../Module/struct_typedef.h
-2025_hero_fric\telescope_task.o: E:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+2025_hero_fric\telescope_task.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 2025_hero_fric\telescope_task.o: ../Algorithm/pid.h
 2025_hero_fric\telescope_task.o: ../Algorithm/math_lib.h
 2025_hero_fric\telescope_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 2025_hero_fric\telescope_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-2025_hero_fric\telescope_task.o: E:\keil\ARM\ARMCC\Bin\..\include\stddef.h
+2025_hero_fric\telescope_task.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 2025_hero_fric\telescope_task.o: ../Core/Inc/FreeRTOSConfig.h
 2025_hero_fric\telescope_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 2025_hero_fric\telescope_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

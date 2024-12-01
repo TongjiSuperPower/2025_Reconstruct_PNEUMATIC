@@ -2,6 +2,8 @@
     "files.associations": {
         "telescope_task.h": "c",
         "pid.h": "c",
-        "math_lib.h": "c"
+        "math_lib.h": "c",
+        "can_task.h": "c",
+        "gimbal_task.h": "c"
     }
 }

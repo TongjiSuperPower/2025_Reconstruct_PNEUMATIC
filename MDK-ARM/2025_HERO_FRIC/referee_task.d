@@ -1,8 +1,8 @@
 2025_hero_fric\referee_task.o: ..\Applications\referee_task.c
 2025_hero_fric\referee_task.o: ..\Applications\referee_task.h
-2025_hero_fric\referee_task.o: E:\keil\ARM\ARMCC\Bin\..\include\stdio.h
+2025_hero_fric\referee_task.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 2025_hero_fric\referee_task.o: ../Module/struct_typedef.h
-2025_hero_fric\referee_task.o: E:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+2025_hero_fric\referee_task.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 2025_hero_fric\referee_task.o: ../Core/Inc/can.h
 2025_hero_fric\referee_task.o: ../Core/Inc/main.h
 2025_hero_fric\referee_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
@@ -19,7 +19,7 @@
 2025_hero_fric\referee_task.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 2025_hero_fric\referee_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 2025_hero_fric\referee_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-2025_hero_fric\referee_task.o: E:\keil\ARM\ARMCC\Bin\..\include\stddef.h
+2025_hero_fric\referee_task.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 2025_hero_fric\referee_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 2025_hero_fric\referee_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 2025_hero_fric\referee_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
@@ -39,8 +39,8 @@
 2025_hero_fric\referee_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 2025_hero_fric\referee_task.o: ../Bsp/bsp_usart.h
 2025_hero_fric\referee_task.o: ../Module/fifo.h
-2025_hero_fric\referee_task.o: E:\keil\ARM\ARMCC\Bin\..\include\string.h
-2025_hero_fric\referee_task.o: E:\keil\ARM\ARMCC\Bin\..\include\stdlib.h
+2025_hero_fric\referee_task.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+2025_hero_fric\referee_task.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 2025_hero_fric\referee_task.o: ../Module/protocol.h
 2025_hero_fric\referee_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 2025_hero_fric\referee_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
@@ -62,7 +62,7 @@
 2025_hero_fric\referee_task.o: ../Algorithm/pid.h
 2025_hero_fric\referee_task.o: ../Module/can_task.h
 2025_hero_fric\referee_task.o: ../Module/CRC8_CRC16.h
-2025_hero_fric\referee_task.o: E:\keil\ARM\ARMCC\Bin\..\include\stdbool.h
+2025_hero_fric\referee_task.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 2025_hero_fric\referee_task.o: ..\Applications\chassis_task.h
 2025_hero_fric\referee_task.o: ..\Applications\supercap_task.h
 2025_hero_fric\referee_task.o: ../Module/remote_control.h

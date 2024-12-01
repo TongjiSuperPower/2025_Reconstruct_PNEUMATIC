@@ -38,6 +38,9 @@ supercap_module_receive_new cap_data;
 //自瞄数据
 autoaim_measure_t autoaim_measure;
 
+//f103数据
+static f103_data_t f103_data;
+
 
 //底盘3508电机数据解算
 void fn_ChassisMotor3508Data(uint8_t i);
@@ -54,8 +57,14 @@ void fn_GimbalMotor3508Data(uint8_t i);
 //小米电机数据解算
 void fn_GimbalMotorMidata(void);
 
-//2006数据解算
-void fn_GimbalMotor2006data(uint8_t i);
+
+
+
+//获取f103指针
+const f103_data_t *fn_get_f103_data_point(void)
+{
+    return &f103_data;
+}
 
 //提取电机回复帧扩展ID中的电机CANID
 static uint32_t Get_Motor_ID(uint32_t CAN_ID_Frame)
@@ -87,6 +96,13 @@ float uint16_to_float(uint16_t x,float x_min,float x_max,int bits)
     uint32_t span = (1 << bits) - 1;
     float offset = x_max - x_min;
     return offset * x / span + x_min;
+}
+
+//f103数据获取
+void get_f103_data(f103_data_t *ptr, uint8_t data[8])
+{
+	ptr->photogate = data[0];
+	ptr->quival_down = (data[1]);
 }
 
 // 达妙电机数据获取
@@ -226,15 +242,12 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 	    			fn_Fp32Limit(&autoaim_measure.pitch,-0.45f,0.35f);
 	    			break;
 	    		}
-
-	    		case CAN_2006_MOTOR_1:
-	    		case CAN_2006_MOTOR_2:
-	    		{
-	    		    static uint8_t i = 0;
-	    		    i = rx_header.StdId - CAN_2006_MOTOR_1;
-	    		    get_motor_measure(&gimbal_motor2006_measure[i], rx_data);
-	    			fn_GimbalMotor2006data(i);
-	    		}
+				case CAN_F103_ID:
+				{
+					get_f103_data(&f103_data,rx_data);
+					break;
+				}
+	    		
 
 	    		default:
 	    		{
@@ -264,6 +277,28 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 	}	
 }
 
+//给f103发送控制数据
+void fn_cmd_F103(uint8_t cylinder_push, uint8_t quick_valve_exhaust, int16_t press_time, int16_t exhaust_time)
+{
+	uint32_t send_mail_box;
+	CAN_TxHeaderTypeDef shoot_tx_message;
+	shoot_tx_message.StdId = 0x305;
+    shoot_tx_message.IDE = CAN_ID_STD;
+    shoot_tx_message.RTR = CAN_RTR_DATA;
+    shoot_tx_message.DLC = 0x08;
+
+	uint8_t shoot_can_send_data[8];
+	shoot_can_send_data[0] = cylinder_push;
+    shoot_can_send_data[1] = quick_valve_exhaust;
+    shoot_can_send_data[2] = (press_time >> 8);
+    shoot_can_send_data[3] = press_time;
+    shoot_can_send_data[4] = (exhaust_time >> 8);
+    shoot_can_send_data[5] = exhaust_time;
+    shoot_can_send_data[6] = 0;
+    shoot_can_send_data[7] = 0;
+
+	HAL_CAN_AddTxMessage(&hcan1, &shoot_tx_message, shoot_can_send_data, &send_mail_box);
+}
 
 // 达妙电机使能帧
 void fn_DM_start_motor(void)
@@ -619,16 +654,6 @@ void fn_ChassisMotor3508Data(uint8_t i){
 }
 
 
-//云台6020电机数据解算
-//void fn_GimbalMotor6020Data(uint8_t i){
-    
-	//解算角度 rad
-    //gimbal_motor6020_data[i].relative_raw_angle = fn_RadFormat((float)(gimbal_motor6020_measure[i].ecd - gimbal_motor6020_data[i].offecd_ecd) / 8192.0f * 2 * PI);
-    
-	//解算速度 rad/s
-    //gimbal_motor6020_data[i].relative_raw_speed = (float)gimbal_motor6020_measure[i].speed_rpm * 2 * PI / 60.0f;
-
-//}
 
 
 //3508拨弹轮数据解算
@@ -643,23 +668,20 @@ void fn_TriggerMotor3508Data(uint8_t i){
 	}
 	//解算角度 rad
     trigger_motor3508_data[i].relative_raw_angle = (float)fn_RadFormat(((trigger_motor3508_measure[i].ecd - trigger_motor3508_data[i].offecd_ecd) + trigger_motor3508_data[i].round_num * 8192) / 8192.0f / 19.02f * 2 * PI);
-//    for(uint8_t k = 5;0 < k;k--){
 
-//        trigger_motor3508_data[i].raw_angle[k] = trigger_motor3508_data[i].raw_angle[k-1];
-
-//	}
-//	trigger_motor3508_data[i].raw_angle[0] = trigger_motor3508_data[i].relative_raw_angle;
+	//解算拨弹轮角度
+	trigger_motor3508_data[i].relative_angle_19laps = (float)trigger_motor3508_data[i].round_num * 8192.0f + (float)trigger_motor3508_measure[i].ecd;
+	while(trigger_motor3508_data[i].relative_angle_19laps >= (8192.0f*3592.0f/187.0f*71.0f/37.0f))
+	{
+		trigger_motor3508_data[i].relative_angle_19laps -= (8192.0f*3592.0f/187.0f*71.0f/37.0f);
+	}
+	trigger_motor3508_data[i].relative_angle_19laps = fn_RadFormat(trigger_motor3508_data[i].relative_angle_19laps * MOTOR_ECD_TO_ANGLE19);
 
     //解算速度 rad/s
 	trigger_motor3508_data[i].relative_raw_speed = (float)trigger_motor3508_measure[i].speed_rpm * 2 * PI / 19.02f / 60.0f;
 	trigger_motor3508_data[i].filter_speed[1] = trigger_motor3508_data[i].filter_speed[0];
 	fn_low_filter(&trigger_motor3508_data[i].filter_speed[0],trigger_motor3508_data[i].relative_raw_speed,0.06f);
-//	for(uint8_t k = 5;0 < k;k--){
 
-//       trigger_motor3508_data[i].raw_speed[k] = trigger_motor3508_data[i].raw_speed[k-1];
-
-//	}
-//	trigger_motor3508_data[i].raw_speed[0] = trigger_motor3508_data[i].relative_raw_speed;
     fn_low_filter(&trigger_motor3508_data[0].filter_given_current,trigger_motor3508_measure[0].given_current,0.06f);
 }
 
@@ -667,17 +689,7 @@ void fn_TriggerMotor3508Data(uint8_t i){
 //云台3508摩擦轮数据解算
 void fn_GimbalMotor3508Data(uint8_t i){
 
-    //多圈编码
-	//if((gimbal_motor3508_measure[i].ecd - gimbal_motor3508_measure[i].last_ecd) > 4096){
-    //    gimbal_motor3508_data[i].round_num --;
-	//}
-    //else if((gimbal_motor3508_measure[i].ecd - gimbal_motor3508_measure[i].last_ecd) < -4096){
-    //    gimbal_motor3508_data[i].round_num ++;
-	//}
-	//解算角度 rad
-    //gimbal_motor3508_data[i].relative_raw_angle = fn_RadFormat((float)((gimbal_motor3508_measure[i].ecd - gimbal_motor3508_data[i].offecd_ecd) + gimbal_motor3508_data[i].round_num * 8192) / 8192.0f / 19.02f * 2 * PI);
     
-    //解算速度 rad/s
 	gimbal_motor3508_data[i].relative_raw_speed = (float)gimbal_motor3508_measure[i].speed_rpm * 2 * PI / 60.0f;
 	//gimbal_motor3508_data[i].filter_speed[1] = gimbal_motor3508_data[i].filter_speed[0];
 	//fn_low_filter(&gimbal_motor3508_data[i].filter_speed[0],gimbal_motor3508_data[i].relative_raw_speed,0.06f);

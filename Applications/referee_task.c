@@ -46,55 +46,55 @@ bool shoot = true;
 ext_id_t MY_CLIENT_ID = clientid_blue_infantry_1;
 int MY_ROBOT_ID = robotid_blue_infantry_1;
 
-uint16_t cmd_id;  // Êý¾Ý°üID
+uint16_t cmd_id;  // ï¿½ï¿½ï¿½Ý°ï¿½ID
 
-ext_game_status_t                          ext_game_status;// ±ÈÈü×´Ì¬Êý¾Ý£¨0x0001£©
-ext_game_result_t                          ext_game_result;//±ÈÈü½á¹ûÊý¾Ý(0x0002)
-ext_game_robot_HP_t                 	   ext_game_robot_HP;//»úÆ÷ÈËÑªÁ¿Êý¾Ý£¨0x0003£©
-
-
-ext_event_data_t                           ext_event_data;//³¡µØÊÂ¼þÊý¾Ý£¨0x0101£©
-ext_supply_projectile_action_t             ext_supply_projectile_action;//²¹¸øÕ¾¶¯×÷±êÊ¶Êý¾Ý£¨0x0102£©
-
-ext_referee_warning_t                      ext_referee_warning;//²ÃÅÐ¾¯¸æÊý¾Ý(0x0104)
-ext_dart_info_t                  		   ext_dart_info;//·ÉïÚ·¢ÉäÏà¹ØÊý¾Ý(0x0105)
+ext_game_status_t                          ext_game_status;// ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½Ý£ï¿½0x0001ï¿½ï¿½
+ext_game_result_t                          ext_game_result;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?(0x0002)
+ext_game_robot_HP_t                 	   ext_game_robot_HP;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñªï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½0x0003ï¿½ï¿½
 
 
-ext_robot_status_t                    	   ext_robot_status;//»úÆ÷ÈËÐÔÄÜÌåÏµÊý¾Ý(0x0201)
-ext_power_heat_data_t                      ext_power_heat_data;//ÊµÊ±µ×ÅÌ¹¦ÂÊºÍÇ¹¿ÚÈÈÁ¿Êý¾Ý£¨0x0202£©
-ext_robot_pos_t                       	   ext_robot_pos;//»úÆ÷ÈËÎ»ÖÃÊý¾Ý£¨0x0203£©
-ext_buff_t                                 ext_buff;//»úÆ÷ÈËÔöÒæÊý¾Ý£¨0x0204£©
-ext_air_support_data_t                     ext_air_support_data;//¿ÕÖÐÖ§Ô®Ê±¼äÊý¾Ý£¨0x0205£©
-ext_hurt_data_t                            ext_hurt_data;//ÉËº¦×´Ì¬Êý¾Ý£¨0x0206£©
-ext_robot_shoot_data_t                     ext_robot_shoot_data;//ÊµÊ±Éä»÷Êý¾Ý£¨0x0207£©
-ext_projectile_allowance_t                 ext_projectile_allowance;//ÔÊÐí·¢µ¯Á¿(0x0208)
-ext_rfid_status_t                          ext_rfid_status;//»úÆ÷ÈË RFID Ä£¿é×´Ì¬(0x0209)
-ext_dart_client_cmd_t                      ext_dart_client_cmd;//·ÉïÚÑ¡ÊÖ¶ËÖ¸ÁîÊý¾Ý(0x020A)
-ext_ground_robot_position_t                ext_ground_robot_position;//µØÃæ»úÆ÷ÈËÎ»ÖÃÊý¾Ý(0x020B)
-ext_radar_mark_data_t                      ext_radar_mark_data;//À×´ï±ê¼Ç½ø¶ÈÊý¾Ý(0x020C)
-ext_sentry_info_t                          ext_sentry_info;//ÉÚ±ø×ÔÖ÷¾ö²ßÐÅÏ¢Í¬²½(0x020D)
-ext_radar_info_t                      	   ext_radar_info;//À×´ï×ÔÖ÷¾ö²ßÐÅÏ¢Í¬²½(0x020E)
+ext_event_data_t                           ext_event_data;//ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½Ý£ï¿½0x0101ï¿½ï¿½
+ext_supply_projectile_action_t             ext_supply_projectile_action;//ï¿½ï¿½ï¿½ï¿½Õ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½Ý£ï¿½0x0102ï¿½ï¿½
 
-//-------------0x0301²¿·Ö¿ªÊ¼-------------------
-ext_robot_interactive_header_data_t        ext_robot_interactive_header_data;//»úÆ÷ÈË½»»¥Êý¾Ý£¨0x0301£©
-robot_interactive_data_t                   robot_interactive_data;//»úÆ÷ÈË¼ä½»»¥Êý¾Ý£¬ÄÚÈÝ ID:0x0200~0x02FF
-ext_interaction_layer_delete_t             ext_interaction_layer_delete;//¿Í»§¶ËÉ¾³ýÍ¼ÐÎ£¬ÄÚÈÝ ID:0x0100;
-graphic_data_struct_t                      graphic_data_struct;//Í¼ÐÎÊý¾Ý
-ext_interaction_figure_t         		   ext_interaction_figure;//¿Í»§¶Ë»æÖÆÒ»¸öÍ¼ÐÎ
-ext_interaction_figure_double_t            ext_interaction_figure_double;//¿Í»§¶Ë»æÖÆÁ½¸öÍ¼ÐÎ
-ext_interaction_figure_five_t              ext_interaction_figure_five;//¿Í»§¶Ë»æÖÆÎå¸öÍ¼ÐÎ
-ext_interaction_figure_seven_t             ext_interaction_figure_seven;//¿Í»§¶Ë»æÖÆÆß¸öÍ¼ÐÎ
-ext_client_custom_character_t              ext_client_custom_character;//¿Í»§¶Ë»æÖÆ×Ö·û
-//-------------0x0301²¿·Ö½áÊø-------------------
+ext_referee_warning_t                      ext_referee_warning;//ï¿½ï¿½ï¿½Ð¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(0x0104)
+ext_dart_info_t                  		   ext_dart_info;//ï¿½ï¿½ï¿½Ú·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?(0x0105)
 
 
-ext_custom_robot_data_t                    ext_custom_robot_data;//×Ô¶¨Òå¿ØÖÆÆ÷Óë»úÆ÷ÈË½»»¥Êý¾Ý(0x0302)
-ext_map_command_t                          ext_map_command; //Ñ¡ÊÖ¶ËÐ¡µØÍ¼½»»¥Êý¾Ý(0x0303)/*·¢ËÍÆµÂÊ£º´¥·¢Ê±·¢ËÍ.*/
-ext_remote_control_t                       ext_remote_control;//¼üÊóÒ£¿ØÊý¾Ý(0x0304)
-ext_client_map_command_t                   ext_client_map_command; //Ñ¡ÊÖ¶ËÐ¡µØÍ¼½ÓÊÕÀ×´ïÊý¾Ý(0x0305)
-ext_custom_client_data_t                   ext_custom_client_data; //×Ô¶¨Òå¿ØÖÆÆ÷ÓëÑ¡ÊÖ¶Ë½»»¥Êý¾Ý(0x0306)
-ext_map_data_t                             ext_map_data; //Ñ¡ÊÖ¶ËÐ¡µØÍ¼½ÓÊÕÉÚ±øÊý¾Ý(0x0307)
-ext_custom_info_t                          ext_custom_info; //Ñ¡ÊÖ¶ËÐ¡µØÍ¼½ÓÊÕ»úÆ÷ÈËÊý¾Ý(0x0308)
+ext_robot_status_t                    	   ext_robot_status;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½(0x0201)
+ext_power_heat_data_t                      ext_power_heat_data;//ÊµÊ±ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½Êºï¿½Ç¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½0x0202ï¿½ï¿½
+ext_robot_pos_t                       	   ext_robot_pos;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½0x0203ï¿½ï¿½
+ext_buff_t                                 ext_buff;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½0x0204ï¿½ï¿½
+ext_air_support_data_t                     ext_air_support_data;//ï¿½ï¿½ï¿½ï¿½Ö§Ô®Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½0x0205ï¿½ï¿½
+ext_hurt_data_t                            ext_hurt_data;//ï¿½Ëºï¿½×´Ì¬ï¿½ï¿½ï¿½Ý£ï¿½0x0206ï¿½ï¿½
+ext_robot_shoot_data_t                     ext_robot_shoot_data;//ÊµÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½?0x0207ï¿½ï¿½
+ext_projectile_allowance_t                 ext_projectile_allowance;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(0x0208)
+ext_rfid_status_t                          ext_rfid_status;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ RFID Ä£ï¿½ï¿½×´Ì¬(0x0209)
+ext_dart_client_cmd_t                      ext_dart_client_cmd;//ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½Ö¶ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(0x020A)
+ext_ground_robot_position_t                ext_ground_robot_position;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?(0x020B)
+ext_radar_mark_data_t                      ext_radar_mark_data;//ï¿½×´ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(0x020C)
+ext_sentry_info_t                          ext_sentry_info;//ï¿½Ú±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢Í¬ï¿½ï¿½(0x020D)
+ext_radar_info_t                      	   ext_radar_info;//ï¿½×´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢Í¬ï¿½ï¿½(0x020E)
+
+//-------------0x0301ï¿½ï¿½ï¿½Ö¿ï¿½Ê¼-------------------
+ext_robot_interactive_header_data_t        ext_robot_interactive_header_data;//ï¿½ï¿½ï¿½ï¿½ï¿½Ë½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½0x0301ï¿½ï¿½
+robot_interactive_data_t                   robot_interactive_data;//ï¿½ï¿½ï¿½ï¿½ï¿½Ë¼ä½»ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ ID:0x0200~0x02FF
+ext_interaction_layer_delete_t             ext_interaction_layer_delete;//ï¿½Í»ï¿½ï¿½ï¿½É¾ï¿½ï¿½Í¼ï¿½Î£ï¿½ï¿½ï¿½ï¿½ï¿½ ID:0x0100;
+graphic_data_struct_t                      graphic_data_struct;//Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ext_interaction_figure_t         		   ext_interaction_figure;//ï¿½Í»ï¿½ï¿½Ë»ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Í¼ï¿½ï¿½
+ext_interaction_figure_double_t            ext_interaction_figure_double;//ï¿½Í»ï¿½ï¿½Ë»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
+ext_interaction_figure_five_t              ext_interaction_figure_five;//ï¿½Í»ï¿½ï¿½Ë»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½?
+ext_interaction_figure_seven_t             ext_interaction_figure_seven;//ï¿½Í»ï¿½ï¿½Ë»ï¿½ï¿½ï¿½ï¿½ß¸ï¿½Í¼ï¿½ï¿½
+ext_client_custom_character_t              ext_client_custom_character;//ï¿½Í»ï¿½ï¿½Ë»ï¿½ï¿½ï¿½ï¿½Ö·ï¿½
+//-------------0x0301ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½-------------------
+
+
+ext_custom_robot_data_t                    ext_custom_robot_data;//ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(0x0302)
+ext_map_command_t                          ext_map_command; //Ñ¡ï¿½Ö¶ï¿½Ð¡ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(0x0303)/*ï¿½ï¿½ï¿½ï¿½Æµï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½.*/
+ext_remote_control_t                       ext_remote_control;//ï¿½ï¿½ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(0x0304)
+ext_client_map_command_t                   ext_client_map_command; //Ñ¡ï¿½Ö¶ï¿½Ð¡ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½×´ï¿½ï¿½ï¿½ï¿½ï¿½(0x0305)
+ext_custom_client_data_t                   ext_custom_client_data; //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½Ö¶Ë½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?(0x0306)
+ext_map_data_t                             ext_map_data; //Ñ¡ï¿½Ö¶ï¿½Ð¡ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½ï¿½(0x0307)
+ext_custom_info_t                          ext_custom_info; //Ñ¡ï¿½Ö¶ï¿½Ð¡ï¿½ï¿½Í¼ï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(0x0308)
 
 frame_header_struct_t ext_referee_receive_header;
 frame_header_struct_t ext_referee_send_header;
@@ -105,24 +105,24 @@ unpack_data_t referee_unpack_obj;
 
 uint8_t usart6_buf[2][USART_RX_BUF_LENGHT];
 
-uint8_t USART6_dma[80];		//DMA½ÓÊÕÊý¾Ý
-uint8_t Personal_Data[128];	//DMA·¢ËÍÊý¾Ý
+uint8_t USART6_dma[80];		//DMAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+uint8_t Personal_Data[128];	//DMAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 void Referee_Task(void const * argument){
     
-    init_referee_struct_data();//ÎªÓÃÓÚÊ¢×°Êý¾ÝµÄ¸÷¸ö½á¹¹Ìå·ÖÅä¿Õ¼ä¡£
-    fifo_s_init(&referee_fifo, referee_fifo_buf, REFEREE_FIFO_BUF_LENGTH);//³õÊ¼»¯ÓÃÓÚ½»»»²ÃÅÐÏµÍ³ÐÅÏ¢µÄ¶ÓÁÐ»º´æ
-    usart6_init(usart6_buf[0], usart6_buf[1], USART_RX_BUF_LENGHT);//Í¨¹ý6ºÅ´®¿ÚÊÕ·¢À´×ÔµçÔ´¹ÜÀíÄ£¿éµÄÊý¾Ý£¬ËÍÖÁÖ÷¿ØÄ£¿éÍ¨¹ýWIFIÓë·þÎñÆ÷Í¨ÐÅ¡£
-	//USART6Í¨¹ý´®¿ÚÖÐ¶Ï½ÓÊÕÊý¾Ý¡£
+    init_referee_struct_data();//Îªï¿½ï¿½ï¿½ï¿½Ê¢×°ï¿½ï¿½ï¿½ÝµÄ¸ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½Õ¼ä¡£
+    fifo_s_init(&referee_fifo, referee_fifo_buf, REFEREE_FIFO_BUF_LENGTH);//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½Ï¢ï¿½Ä¶ï¿½ï¿½Ð»ï¿½ï¿½ï¿½
+    usart6_init(usart6_buf[0], usart6_buf[1], USART_RX_BUF_LENGHT);//Í¨ï¿½ï¿½6ï¿½Å´ï¿½ï¿½ï¿½ï¿½Õ·ï¿½ï¿½ï¿½ï¿½Ôµï¿½Ô´ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½?ï¿½ï¿½WIFIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½Å¡ï¿½
+	//USART6Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¡ï¿½
 	
 	uint16_t UI_PushUp_Counter = 0;
 	uint16_t UI_static_Counter = 0;
-	/* ²ÃÅÐÏµÍ³³õÊ¼»¯ */
+	/* ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½Ê¼ï¿½ï¿½ */
 	vTaskDelay(300);
 
 	while(1){
-		referee_unpack_fifo_data();//½ÓÊÕÊý¾Ý
+		referee_unpack_fifo_data();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	    vTaskDelay(10);
 		get_robot_id();
@@ -148,20 +148,20 @@ void Referee_Task(void const * argument){
 		}
 
         if(UI_static_Counter == 57 && IF_KEY_PRESSED_R){
-		    send_multi_static_graphic();//Æß¸ö
+		    send_multi_static_graphic();//ï¿½ß¸ï¿½
 			continue;
 	    }
 
-		//µçÈÝÊý¾Ý
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if(UI_PushUp_Counter == 7){
 			//REST ENERGY
             send_capvol_graphic(cap_data.Capacity);
 			continue;
 		}
 
-		//ÆäÓà¶¯Ì¬Êý¾ÝUI
+		//ï¿½ï¿½ï¿½à¶¯Ì¬ï¿½ï¿½ï¿½ï¿½UI
 		if(UI_PushUp_Counter == 1){
-			send_multi_dynamic_graphic();//Æß¸ö
+			send_multi_dynamic_graphic();//ï¿½ß¸ï¿½
 			continue;
 		}
 	}
@@ -511,7 +511,7 @@ void get_robot_id()
 		}
 }
 
-void send_multi_static_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÎå¸ö¸öÍ¼ÐÎµÄÊý¾Ý¡£Ã¿¸öÍ¼ÐÎ°üº¬ÆðµãÖÕµã¡¢²Ù×÷ÀàÐÍ¡¢ÑÕÉ«¡¢Ïß¿íµÈÊôÐÔ¡£
+void send_multi_static_graphic(void)//ï¿½ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½Îµï¿½ï¿½ï¿½ï¿½Ý¡ï¿½Ã¿ï¿½ï¿½Í¼ï¿½Î°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¡ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ß¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¡ï¿½
 {
 
 	ext_interaction_figure_seven_t graphic_draw;
@@ -559,10 +559,10 @@ void send_multi_static_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÎå¸ö¸öÍ¼ÐÎµÄÊý¾Ý¡£Ã¿¸öÍ¼ÐÎ°üº¬
 		}
 	}
 	
-	//×¼ÐÇ
+	//×¼ï¿½ï¿½
 	//(952,509)
-	//ÊúÏß
-	//ÊúÏß
+	//ï¿½ï¿½ï¿½ï¿½
+	//ï¿½ï¿½ï¿½ï¿½
 	graphic_draw.graphic_data_struct[0].graphic_name[0] = '2';
 	graphic_draw.graphic_data_struct[0].graphic_name[1] = '4';
 	graphic_draw.graphic_data_struct[0].graphic_name[2] = '1';
@@ -579,7 +579,7 @@ void send_multi_static_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÎå¸ö¸öÍ¼ÐÎµÄÊý¾Ý¡£Ã¿¸öÍ¼ÐÎ°üº¬
 	graphic_draw.graphic_data_struct[0].start_y = 537;
 	graphic_draw.graphic_data_struct[0].details_d = 936;
 	graphic_draw.graphic_data_struct[0].details_e = 497;
-	//ºáÏß
+	//ï¿½ï¿½ï¿½ï¿½
     graphic_draw.graphic_data_struct[1].graphic_name[0] = '2';
 	graphic_draw.graphic_data_struct[1].graphic_name[1] = '4';
 	graphic_draw.graphic_data_struct[1].graphic_name[2] = '2';
@@ -598,7 +598,7 @@ void send_multi_static_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÎå¸ö¸öÍ¼ÐÎµÄÊý¾Ý¡£Ã¿¸öÍ¼ÐÎ°üº¬
 	graphic_draw.graphic_data_struct[1].details_e = 517;
 
 
-	//Ô²¿ò
+	//Ô²ï¿½ï¿½
 	graphic_draw.graphic_data_struct[2].graphic_name[0] = '2';
 	graphic_draw.graphic_data_struct[2].graphic_name[1] = '3';
 	graphic_draw.graphic_data_struct[2].graphic_name[2] = '1';
@@ -615,7 +615,7 @@ void send_multi_static_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÎå¸ö¸öÍ¼ÐÎµÄÊý¾Ý¡£Ã¿¸öÍ¼ÐÎ°üº¬
 	graphic_draw.graphic_data_struct[2].start_y = 600;
 	graphic_draw.graphic_data_struct[2].details_c = 33;
 
-    //Ô²¿ò
+    //Ô²ï¿½ï¿½
 	graphic_draw.graphic_data_struct[3].graphic_name[0] = '2';
 	graphic_draw.graphic_data_struct[3].graphic_name[1] = '3';
 	graphic_draw.graphic_data_struct[3].graphic_name[2] = '2';
@@ -632,7 +632,7 @@ void send_multi_static_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÎå¸ö¸öÍ¼ÐÎµÄÊý¾Ý¡£Ã¿¸öÍ¼ÐÎ°üº¬
 	graphic_draw.graphic_data_struct[3].start_y = 800;
 	graphic_draw.graphic_data_struct[3].details_c = 33;
 
-	//µçÈÝ¿ò
+	//ï¿½ï¿½ï¿½Ý¿ï¿½
 	graphic_draw.graphic_data_struct[4].graphic_name[0] = '2';
 	graphic_draw.graphic_data_struct[4].graphic_name[1] = '3';
 	graphic_draw.graphic_data_struct[4].graphic_name[2] = '3';
@@ -650,7 +650,7 @@ void send_multi_static_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÎå¸ö¸öÍ¼ÐÎµÄÊý¾Ý¡£Ã¿¸öÍ¼ÐÎ°üº¬
 	graphic_draw.graphic_data_struct[4].details_d = 1172;
 	graphic_draw.graphic_data_struct[4].details_e = 60;
 
-    //Ê¾¿íÏßÓÒ
+    //Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	graphic_draw.graphic_data_struct[5].graphic_name[0] = '2';
 	graphic_draw.graphic_data_struct[5].graphic_name[1] = '8';
 	graphic_draw.graphic_data_struct[5].graphic_name[2] = '1';
@@ -668,7 +668,7 @@ void send_multi_static_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÎå¸ö¸öÍ¼ÐÎµÄÊý¾Ý¡£Ã¿¸öÍ¼ÐÎ°üº¬
 	graphic_draw.graphic_data_struct[5].details_d = 1142;
 	graphic_draw.graphic_data_struct[5].details_e = 255;
 
-    //Ê¾¿íÏß×ó
+    //Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	graphic_draw.graphic_data_struct[6].graphic_name[0] = '2';
 	graphic_draw.graphic_data_struct[6].graphic_name[1] = '8';
 	graphic_draw.graphic_data_struct[6].graphic_name[2] = '2';
@@ -689,7 +689,7 @@ void send_multi_static_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÎå¸ö¸öÍ¼ÐÎµÄÊý¾Ý¡£Ã¿¸öÍ¼ÐÎ°üº¬
 	referee_send_multi_graphic(MY_CLIENT_ID, &graphic_draw);
 }
 
-void send_multi_dynamic_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÆß¸ö¶¯Ì¬Í¼ÐÎµÄÊý¾Ý¡£
+void send_multi_dynamic_graphic(void)//ï¿½ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½ï¿½?Í¼ï¿½Îµï¿½ï¿½ï¿½ï¿½Ý¡ï¿½
 {
 
 	ext_interaction_figure_seven_t graphic_draw;
@@ -737,7 +737,7 @@ void send_multi_dynamic_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÆß¸ö¶¯Ì¬Í¼ÐÎµÄÊý¾Ý¡£
 		}
 	}
 
-    //¶æ»úÊý¾Ý
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 	if(1 == 0){
 		graphic_draw.graphic_data_struct[0].operate_tpye = 1;
 	}
@@ -752,14 +752,14 @@ void send_multi_dynamic_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÆß¸ö¶¯Ì¬Í¼ÐÎµÄÊý¾Ý¡£
 	graphic_draw.graphic_data_struct[0].graphic_tpye = 2;
 	
 	graphic_draw.graphic_data_struct[0].layer = 0;
-	graphic_draw.graphic_data_struct[0].width = 20; //ÏßÌõ¿í¶È
+	graphic_draw.graphic_data_struct[0].width = 20; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
 	graphic_draw.graphic_data_struct[0].start_x = 1800;
 	graphic_draw.graphic_data_struct[0].start_y = 500;
 	
 	graphic_draw.graphic_data_struct[0].details_c = 20;
         
-	//×ÔÃéÊý¾Ý Ïà»ú×ÔÃéÊÓ³¡½Ç
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½?
 	graphic_draw.graphic_data_struct[1].graphic_name[0] = '4';
 	graphic_draw.graphic_data_struct[1].graphic_name[1] = '0';
 	graphic_draw.graphic_data_struct[1].graphic_name[2] = '9';
@@ -793,8 +793,8 @@ void send_multi_dynamic_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÆß¸ö¶¯Ì¬Í¼ÐÎµÄÊý¾Ý¡£
 	graphic_draw.graphic_data_struct[1].details_d = 1280;
 	graphic_draw.graphic_data_struct[1].details_e = 770;
 
-
-    //Ä¦²ÁÂÖÊÇ·ñ¿ªÆô
+	/*Ä¦ï¿½ï¿½ï¿½Ö¿ï¿½ï¿½ï¿½ui*/
+   /*  
 	if (shoot_data.fric_state == FRIC_ON)
 	{
 		graphic_draw.graphic_data_struct[2].operate_tpye = 1;
@@ -811,14 +811,14 @@ void send_multi_dynamic_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÆß¸ö¶¯Ì¬Í¼ÐÎµÄÊý¾Ý¡£
 	graphic_draw.graphic_data_struct[2].graphic_tpye = 2;
 	
 	graphic_draw.graphic_data_struct[2].layer = 0;
-	graphic_draw.graphic_data_struct[2].width = 20; //ÏßÌõ¿í¶È
+	graphic_draw.graphic_data_struct[2].width = 20; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
 	graphic_draw.graphic_data_struct[2].start_x = 1800;
 	graphic_draw.graphic_data_struct[2].start_y = 600;
 	
-	graphic_draw.graphic_data_struct[2].details_c = 20;
+	graphic_draw.graphic_data_struct[2].details_c = 20; */
         
-	//ÊÇ·ñÔÚÐ¡ÍÓÂÝ
+	//ï¿½Ç·ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½
 	if (chassis_move_data.chassis_mode == chassis_spin){
 		graphic_draw.graphic_data_struct[3].color = 2;
 		graphic_draw.graphic_data_struct[3].operate_tpye = 1;
@@ -834,14 +834,14 @@ void send_multi_dynamic_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÆß¸ö¶¯Ì¬Í¼ÐÎµÄÊý¾Ý¡£
 	graphic_draw.graphic_data_struct[3].graphic_tpye = 2;
 	
 	graphic_draw.graphic_data_struct[3].layer = 0;
-	graphic_draw.graphic_data_struct[3].width = 20; //ÏßÌõ¿í¶È
+	graphic_draw.graphic_data_struct[3].width = 20; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
 	graphic_draw.graphic_data_struct[3].start_x = 1800;
 	graphic_draw.graphic_data_struct[3].start_y = 800;
 	
 	graphic_draw.graphic_data_struct[3].details_c = 20;
 
-	//Éä»÷Ä£Ê½
+	//ï¿½ï¿½ï¿½Ä£ï¿½?
 	graphic_draw.graphic_data_struct[4].graphic_name[0] = '1';
 	graphic_draw.graphic_data_struct[4].graphic_name[1] = '0';
 	graphic_draw.graphic_data_struct[4].graphic_name[2] = '9';
@@ -857,7 +857,7 @@ void send_multi_dynamic_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÆß¸ö¶¯Ì¬Í¼ÐÎµÄÊý¾Ý¡£
 	graphic_draw.graphic_data_struct[4].graphic_tpye = 1;
 	graphic_draw.graphic_data_struct[4].layer = 0;
 
-	if(shoot_data.shoot_mode == SHOOT_READY_COUNTINUE){
+	/* if(shoot_data.shoot_mode == SHOOT_READY_COUNTINUE){
 		graphic_draw.graphic_data_struct[4].color = 2;
 	}
     else if(shoot_data.shoot_mode == SHOOT_READY_SINGLE){
@@ -890,7 +890,7 @@ void send_multi_dynamic_graphic(void)//Ïò¿Í»§¶Ë·¢ËÍÆß¸ö¶¯Ì¬Í¼ÐÎµÄÊý¾Ý¡£
     graphic_draw.graphic_data_struct[5].start_x = 760;
 	graphic_draw.graphic_data_struct[5].start_y = 80;
 	graphic_draw.graphic_data_struct[5].details_d = 1172;
-	graphic_draw.graphic_data_struct[5].details_e = 60;
+	graphic_draw.graphic_data_struct[5].details_e = 60; */
 
 
 	graphic_draw.graphic_data_struct[6].graphic_name[0] = '2';
@@ -939,7 +939,7 @@ void send_capvol_graphic(int capvols)
 	graphic_draw.graphic_tpye = 0;
 	graphic_draw.layer = 1;
 
-	graphic_draw.width = 18; //ÏßÌõ¿í¶È
+	graphic_draw.width = 18; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	graphic_draw.start_x = 761;
 	graphic_draw.start_y = 70;
 	
@@ -970,7 +970,7 @@ void referee_send_multi_graphic(ext_id_t target_id, ext_interaction_figure_seven
 	append_CRC16_check_sum((uint8_t*)&robot_data, sizeof(robot_data));
 
 	memcpy(Personal_Data, (uint8_t*)&robot_data, sizeof(robot_data));
-	usart6_tx_dma_enable(Personal_Data, sizeof(robot_data));//½«¶¨ÖÆºÃµÄÍ¼ÐÎÊý¾Ý´«Êä³öÈ¥
+	usart6_tx_dma_enable(Personal_Data, sizeof(robot_data));//ï¿½ï¿½ï¿½ï¿½ï¿½ÆºÃµï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½ï¿½ï¿½?
 
 }
 
@@ -993,7 +993,7 @@ void referee_send_five_graphic(ext_id_t target_id, ext_interaction_figure_five_t
 	append_CRC16_check_sum((uint8_t*)&robot_data, sizeof(robot_data));
 
 	memcpy(Personal_Data, (uint8_t*)&robot_data, sizeof(robot_data));
-	usart6_tx_dma_enable(Personal_Data, sizeof(robot_data));//½«¶¨ÖÆºÃµÄÍ¼ÐÎÊý¾Ý´«Êä³öÈ¥
+	usart6_tx_dma_enable(Personal_Data, sizeof(robot_data));//ï¿½ï¿½ï¿½ï¿½ï¿½ÆºÃµï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½ï¿½ï¿½?
 
 }
 
@@ -1016,7 +1016,7 @@ void referee_send_two_graphic(ext_id_t target_id, ext_interaction_figure_double_
 	append_CRC16_check_sum((uint8_t*)&robot_data, sizeof(robot_data));
 
 	memcpy(Personal_Data, (uint8_t*)&robot_data, sizeof(robot_data));
-	usart6_tx_dma_enable(Personal_Data, sizeof(robot_data));//½«¶¨ÖÆºÃµÄÍ¼ÐÎÊý¾Ý´«Êä³öÈ¥
+	usart6_tx_dma_enable(Personal_Data, sizeof(robot_data));//ï¿½ï¿½ï¿½ï¿½ï¿½ÆºÃµï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½ï¿½ï¿½?
 }
 
 void send_double_text(void)
@@ -1071,7 +1071,7 @@ void referee_send_client_graphic(ext_id_t target_id, graphic_data_struct_t* grap
 	robot_data.robot_id = target_id;
 	
 	robot_data.graphic_data = *graphic_draw;
-	append_CRC16_check_sum((uint8_t*)&robot_data, sizeof(robot_data));//Ö¡Í·CRCÐ£Ñé
+	append_CRC16_check_sum((uint8_t*)&robot_data, sizeof(robot_data));//Ö¡Í·CRCÐ£ï¿½ï¿½
 
 	memcpy(Personal_Data, (uint8_t*)&robot_data, sizeof(robot_data));
 	usart6_tx_dma_enable(Personal_Data, sizeof(robot_data));
@@ -1101,7 +1101,7 @@ void referee_send_client_character(ext_id_t target_id, ext_client_custom_charact
 
 }
 
-//×Ö·û·¢ËÍº¯Êý
+//ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Íºï¿½ï¿½ï¿½
 void  send_string(char* str, char* name, int x, int y, int upd, int colour)
 {
 	int len = strlen(str) + 1;
@@ -1140,7 +1140,7 @@ void send_rub_graphic(char graphname[3], int x, int y, int color, int type)
 	graphic_draw.graphic_tpye = 2;
 	
 	graphic_draw.layer = 0;
-	graphic_draw.width = 20; //ÏßÌõ¿í¶È
+	graphic_draw.width = 20; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
 	graphic_draw.start_x = x;
 	graphic_draw.start_y = y;
@@ -1152,7 +1152,7 @@ void send_rub_graphic(char graphname[3], int x, int y, int color, int type)
 	referee_send_client_graphic(MY_CLIENT_ID, &graphic_draw);
 }
 
-//»­Ò»ÌõÖ±Ïß
+//ï¿½ï¿½Ò»ï¿½ï¿½Ö±ï¿½ï¿½
 void send_line_graphic(char name[3], uint32_t start_x, uint32_t start_y, uint32_t end_x, uint32_t end_y){
 
     graphic_data_struct_t graphic_draw;
@@ -1177,7 +1177,7 @@ void send_line_graphic(char name[3], uint32_t start_x, uint32_t start_y, uint32_
 	referee_send_client_graphic(MY_CLIENT_ID, &graphic_draw);
 }
 
-//¾ØÐÎ
+//ï¿½ï¿½ï¿½ï¿½
 void send_rectangle_graphic(char name[3], uint32_t x, uint32_t y, uint32_t end_x, uint32_t end_y){
 	graphic_data_struct_t graphic_draw;
 
@@ -1226,7 +1226,7 @@ void send_circle_graphic(char name[3], uint32_t x, uint32_t y, uint32_t radius){
 	referee_send_client_graphic(MY_CLIENT_ID, &graphic_draw);
 }
 
-//´ÖÔ²
+//ï¿½ï¿½Ô²
 void send_spinning_graphic(char name[3], int x, int y, int color, int type)
 {
 	
@@ -1243,7 +1243,7 @@ void send_spinning_graphic(char name[3], int x, int y, int color, int type)
 	graphic_draw.graphic_tpye = 2;
 	
 	graphic_draw.layer = 0;
-	graphic_draw.width = 20; //ÏßÌõ¿í¶È
+	graphic_draw.width = 20; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
 	graphic_draw.start_x = x;
 	graphic_draw.start_y = y;
@@ -1339,10 +1339,10 @@ void send_shoot_state(void){
 	}
 	graphic_draw.graphic_tpye = 1;
 	graphic_draw.layer = 0;
-	if(shoot_data.shoot_mode == SHOOT_READY_COUNTINUE){
+	if(shoot_control.shoot_mode == SHOOT_READY){
 		  graphic_draw.color = 2;
 	}
-  else if(shoot_data.shoot_mode == SHOOT_READY_SINGLE){
+  else if(shoot_control.shoot_mode == SHOOT_BULLET){
 		  graphic_draw.color = 3;
   }
 	else{
@@ -1357,14 +1357,14 @@ void send_shoot_state(void){
 	referee_send_client_graphic(MY_CLIENT_ID, &graphic_draw);
 }
 
-//¶ÁÈ¡µ×ÅÌ¹¦ÂÊ
+//ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½
 void get_chassis_power_and_buffer(fp32 *power, fp32 *buffer)
 {
     *power = ext_power_heat_data.chassis_power;
     *buffer = ext_power_heat_data.buffer_energy;
 }
 
-//¶ÁÈ¡Ç¹¿ÚÉäËÙ
+//ï¿½ï¿½È¡Ç¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void get_shoot_speed(float *speed){
 	*speed = ext_robot_shoot_data.initial_speed;;
 }

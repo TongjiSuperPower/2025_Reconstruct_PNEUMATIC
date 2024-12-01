@@ -1,7 +1,7 @@
 2025_hero_fric\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/croutine.c
 2025_hero_fric\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-2025_hero_fric\croutine.o: E:\keil\ARM\ARMCC\Bin\..\include\stddef.h
-2025_hero_fric\croutine.o: E:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+2025_hero_fric\croutine.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+2025_hero_fric\croutine.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 2025_hero_fric\croutine.o: ../Core/Inc/FreeRTOSConfig.h
 2025_hero_fric\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 2025_hero_fric\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

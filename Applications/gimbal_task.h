@@ -53,7 +53,7 @@
 //自瞄控制模式
 //自瞄Yaw陀螺仪双环外环pid参数-达妙
 #define GimbalPid1YawAutoaim_kp 15.0f
-#define GimbalPid1YawAutoaim_ki 0.0f
+#define GimbalPid1YawAutoaim_ki 0.01f
 #define GimbalPid1YawAutoaim_kd 10.0f
 
 #define GimbalPid2YawAutoaim_kp 1.0f
@@ -61,13 +61,13 @@
 #define GimbalPid2YawAutoaim_kd 5.0f
 
 //自瞄Pitch陀螺仪双环外环pid参数-小米
-#define GimbalPid1PitchAutoaim_kp 0.0f
-#define GimbalPid1PitchAutoaim_ki 0.0f
-#define GimbalPid1PitchAutoaim_kd 0.0f
+#define GimbalPid1PitchAutoaim_kp 30.0f
+#define GimbalPid1PitchAutoaim_ki 0.01f
+#define GimbalPid1PitchAutoaim_kd 20.0f
 
-#define GimbalPid2PitchAutoaim_kp 0.0f
+#define GimbalPid2PitchAutoaim_kp 1.1f
 #define GimbalPid2PitchAutoaim_ki 0.0f
-#define GimbalPid2PitchAutoaim_kd 0.0f
+#define GimbalPid2PitchAutoaim_kd 5.0f
 
 //达妙最大输出
 #define GimbalPidYawMinOut -10.0f
@@ -94,9 +94,9 @@
 #define TurnOverColdTime 800            //ms
 
 //重力补偿力矩
-#define Tor_param 2.0f
+#define Tor_param 0.0f// 2.0f
 //重心偏移角
-#define OFFSET_ANGLE -0.1545f               //rad
+#define OFFSET_ANGLE -0.7545f               //rad
 
 //云台状态机参数
 typedef enum{

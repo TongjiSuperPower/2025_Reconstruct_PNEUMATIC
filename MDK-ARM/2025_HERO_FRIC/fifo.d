@@ -1,9 +1,9 @@
 2025_hero_fric\fifo.o: ..\Module\fifo.c
 2025_hero_fric\fifo.o: ..\Module\fifo.h
-2025_hero_fric\fifo.o: E:\keil\ARM\ARMCC\Bin\..\include\stdio.h
-2025_hero_fric\fifo.o: E:\keil\ARM\ARMCC\Bin\..\include\stdint.h
-2025_hero_fric\fifo.o: E:\keil\ARM\ARMCC\Bin\..\include\string.h
-2025_hero_fric\fifo.o: E:\keil\ARM\ARMCC\Bin\..\include\stdlib.h
+2025_hero_fric\fifo.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+2025_hero_fric\fifo.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+2025_hero_fric\fifo.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+2025_hero_fric\fifo.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 2025_hero_fric\fifo.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 2025_hero_fric\fifo.o: ../Core/Inc/stm32f4xx_hal_conf.h
 2025_hero_fric\fifo.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
@@ -18,7 +18,7 @@
 2025_hero_fric\fifo.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 2025_hero_fric\fifo.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 2025_hero_fric\fifo.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-2025_hero_fric\fifo.o: E:\keil\ARM\ARMCC\Bin\..\include\stddef.h
+2025_hero_fric\fifo.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 2025_hero_fric\fifo.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 2025_hero_fric\fifo.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 2025_hero_fric\fifo.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h

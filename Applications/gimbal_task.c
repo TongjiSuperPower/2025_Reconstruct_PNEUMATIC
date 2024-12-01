@@ -17,7 +17,7 @@
 //射击数据发送频率控制符
 uint16_t shoot_mode_sned_num;
 uint16_t q_send_num;
-uint8_t fric_send_num = 0;
+
 
 //云台数据结构定义
 gimbal_data_t gimbal_data;
@@ -61,11 +61,6 @@ void Gimbal_Task(void const * argument){
     //云台初始化
     fn_GimbalInit();
 
-    //拨弹轮2006初始化
-    fn_ShootMotorInit();
-
-    //摩擦轮3508初始化
-    fn_shoot_motor3508_init();
 
     //射击模块初始化
     fn_shoot_init();
@@ -84,14 +79,13 @@ void Gimbal_Task(void const * argument){
         //云台电机选择模式
         fn_GimbalMode();
 
-        //射击模块模式选择
-        fn_fric_state();
+        //计算射击拨弹轮电流
+        fn_shoot_control_loop();
 
         //计算云台电机电流
         fn_GimbalMove();
 
-        //计算射击电机电流
-        fn_ShootMove();
+        
         
         //给上位机发送射击数据 50Hz
         if(shoot_mode_sned_num > 19){
@@ -107,30 +101,13 @@ void Gimbal_Task(void const * argument){
 		}
 		q_send_num++;
 				
-				//fn_cmd_CAN2GimbalMotor(0,0,0,0);
-        if(fric_send_num > 1){
-            fn_cmd_CAN1GimbalMotor1(gimbal_motor3508_data[0].given_current,gimbal_motor3508_data[1].given_current,gimbal_motor3508_data[2].given_current,0);
-            //fn_cmd_CAN1GimbalMotor1(0,0,0,0);
-            fric_send_num = 0;
-        }
-        fric_send_num ++;
-				motor_mi_controlmode(gimbal_motormi_data[0].given_current,0,0,0,0);
-        //motor_mi_controlmode(0,0,0,0,0);
 				
+        
+		motor_mi_controlmode(gimbal_motormi_data[0].given_current,0,0,0,0);
+        //motor_mi_controlmode(0,0,0,0,0);
+		fn_cmd_CAN2TriggerMotor(shoot_control.given_current,0,0,0);		
 
-//        //给上位机发送射击数据 50Hz
-//        if(shoot_mode_sned_num > 19){
-//            fn_cmd_shoot_data_to_computer(ext_robot_shoot_data.initial_speed,shoot_mode_flag);
-//            shoot_mode_sned_num = 0;
-//        }
-//        shoot_mode_sned_num++;
 
-//        //给上位机发送四元数 500Hz
-//        if(q_send_num >= 2){
-//            fn_cmd_quat_to_computer(INS_quat[1],INS_quat[2],INS_quat[3],INS_quat[0]);
-//			q_send_num=0;
-//		}
-//		q_send_num++;
 
         //频率1000Hz
         vTaskDelay(1);
@@ -203,7 +180,7 @@ void fn_GimbalMotorInit(void){
     gimbal_motor4310_data[0].round_num = 0;
     gimbal_motor4310_data[0].target_angle = 0.0f;
     gimbal_motor4310_data[0].target_torque = 0.0f;
-    gimbal_motor4310_data[0].offecd_angle = -0.24904f;
+    gimbal_motor4310_data[0].offecd_angle = -1.89034f;
 																			
 
     gimbal_motor4310_data[0].double_pid_mid = 0.0f;
@@ -220,7 +197,7 @@ void fn_GimbalMotorInit(void){
     gimbal_motormi_data[0].relative_raw_angle = 0.0f;
     //gimbal_motor6020_data[i].offecd_ecd = gimbal_motor3508_measure[i].ecd;
     //gimbal_motormi_data[0].offecd_ecd = 33910;
-		gimbal_motormi_data[0].offecd_ecd = gimbal_motormi_measure[0].ecd + 735;
+		gimbal_motormi_data[0].offecd_ecd = gimbal_motormi_measure[0].ecd + 915;
 		if(gimbal_motormi_data[0].offecd_ecd < 20000 || gimbal_motormi_data[0].offecd_ecd > 65000){
 		    gimbal_motormi_data[0].offecd_ecd = 34020;
 		}
@@ -271,16 +248,18 @@ void fn_GimbalMode(void){
 
     //键鼠 长按鼠标右键自瞄 只长按B打符
     if(IF_RC_SW2_MID){
-        if(!IF_MOUSE_PRESSED_RIGHT){
-            gimbal_data.last_gimbal_behaviour = gimbal_data.gimbal_behaviour;
-            gimbal_data.gimbal_behaviour = GIMBAL_GYRO;
-            shoot_mode_flag = 0;
-        }
+        gimbal_data.last_gimbal_behaviour = gimbal_data.gimbal_behaviour;
+        gimbal_data.gimbal_behaviour = GIMBAL_AUTO;
+        //if(!IF_MOUSE_PRESSED_RIGHT){
+        //    gimbal_data.last_gimbal_behaviour = gimbal_data.gimbal_behaviour;
+        //    gimbal_data.gimbal_behaviour = GIMBAL_GYRO;
+        //    shoot_mode_flag = 0;
+        //}
         //按下右键时判定为自瞄模式
-        else{
-            gimbal_data.last_gimbal_behaviour = gimbal_data.gimbal_behaviour;
-            gimbal_data.gimbal_behaviour = GIMBAL_AUTO;
-        }
+        //else{
+        //    gimbal_data.last_gimbal_behaviour = gimbal_data.gimbal_behaviour;
+        //    gimbal_data.gimbal_behaviour = GIMBAL_AUTO;
+        //}
     }
     
     //判断是否进入回中模式
@@ -334,8 +313,8 @@ void fn_GimbalMove(void){
 
         gimbal_motor4310_data[0].target_torque = 0.0f;
         if(gimbal_into_zero_force_time < 2000){
-            gimbal_motormi_data[0].given_current = sin(PI / 2.0f - OFFSET_ANGLE * PI + gimbal_motormi_data[0].relative_raw_angle) * Tor_param * 0.7;
-        }
+            gimbal_motormi_data[0].given_current = sin(PI / 2.0f - OFFSET_ANGLE + gimbal_motormi_data[0].relative_raw_angle) * Tor_param * 0.7;
+		}
         else{
             gimbal_motormi_data[0].given_current = 0.0f;
         }
@@ -366,7 +345,7 @@ void fn_GimbalMove(void){
 
                 gimbal_data.f_GimbalPitPidMid = fn_PidClacAngle(&gimbal_data.GimbalIMUPitPid1,INS_eulers[1], gimbal_data.gyro_pit_target_angle);
                 gimbal_motormi_data[0].given_current = -fn_PidClac(&gimbal_data.GimbalIMUPitPid2,INS_gyro[0],gimbal_data.f_GimbalPitPidMid)
-                                                        + sin(PI / 2.0f - OFFSET_ANGLE * PI + gimbal_motormi_data[0].relative_raw_angle) * Tor_param;
+                                                        + sin(PI / 2.0f - OFFSET_ANGLE + gimbal_motormi_data[0].relative_raw_angle) * Tor_param;
             }
         }
 
@@ -429,7 +408,7 @@ void fn_GimbalMove(void){
 
                 gimbal_data.f_GimbalPitPidMid = fn_PidClacAngle(&gimbal_data.GimbalIMUPitPid1,INS_eulers[1], gimbal_data.gyro_pit_target_angle);
                 gimbal_motormi_data[0].given_current = -fn_PidClac(&gimbal_data.GimbalIMUPitPid2,INS_gyro[0],gimbal_data.f_GimbalPitPidMid)
-                                                        + sin(PI / 2.0f - OFFSET_ANGLE * PI + gimbal_motormi_data[0].relative_raw_angle) * Tor_param;
+                                                        + sin(PI / 2.0f - OFFSET_ANGLE + gimbal_motormi_data[0].relative_raw_angle) * Tor_param;
             }
 
             //自瞄控云台
@@ -458,7 +437,7 @@ void fn_GimbalMove(void){
 
                 gimbal_data.f_GimbalPitAutoaimPidMid = fn_PidClacAngle(&gimbal_data.GimbalIMUPitAutoaimPid1,INS_eulers[1], gimbal_data.gyro_pit_target_angle);
                 gimbal_motormi_data[0].given_current = -fn_PidClac(&gimbal_data.GimbalIMUPitAutoaimPid2,INS_gyro[0],gimbal_data.f_GimbalPitAutoaimPidMid)
-                                                        + sin(PI / 2.0f - OFFSET_ANGLE * PI + gimbal_motormi_data[0].relative_raw_angle) * Tor_param;
+                                                        + sin(PI / 2.0f - OFFSET_ANGLE + gimbal_motormi_data[0].relative_raw_angle) * Tor_param;
             }
 
             //不在自瞄则将自瞄PID的Iout清零，减少对后续的影响
@@ -507,6 +486,6 @@ void fn_GimbalMove(void){
                                                 gimbal_motormi_data[0].relative_raw_angle,gimbal_motormi_data[0].target_angle);
         gimbal_motormi_data[0].given_current = fn_PidClac(&gimbal_motormi_data[0].motor_pid2,
                                                 gimbal_motormi_data[0].relative_raw_speed,gimbal_motormi_data[0].double_pid_mid)
-                                                + sin(PI / 2.0f - OFFSET_ANGLE * PI + gimbal_motormi_data[0].relative_raw_angle) * Tor_param;
+                                                + sin(PI / 2.0f - OFFSET_ANGLE + gimbal_motormi_data[0].relative_raw_angle) * Tor_param;
     }
 }

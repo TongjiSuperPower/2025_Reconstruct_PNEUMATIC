@@ -10,9 +10,9 @@ typedef struct{
 	fp32 f_Kd;
 	
 	//error
-	fp32 f_Error;       //Îó²î
+	fp32 f_Error;       //ï¿½ï¿½ï¿½
 	fp32 f_ErrorAngle; //
-	fp32 f_LastError;  // ÉÏÒ»´ÎÎó²îÖµ
+	fp32 f_LastError;  // ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
 	
 	//pid limitation
 	fp32 f_MinIout;
@@ -33,10 +33,10 @@ typedef struct{
 }pid_type_def;
 
 
-//PID³õÊ¼»¯
+//PIDï¿½ï¿½Ê¼ï¿½ï¿½
 void fn_PidInit(pid_type_def *pid,const fp32 PID[3],fp32 min_out,fp32 max_out,fp32 min_iout,fp32 max_iout);
 
-//PID¼ÆËã
+//PIDï¿½ï¿½ï¿½ï¿½
 fp32 fn_PidClac(pid_type_def *pid,fp32 ref,fp32 set);
 
 fp32 fn_PidClacAngle(pid_type_def *pid,fp32 ref,fp32 set);
@@ -45,4 +45,5 @@ fp32 fn_Iclear_PidClac(pid_type_def *pid,fp32 ref,fp32 set);
 
 fp32 fn_Iclear_PidClacAngle(pid_type_def *pid,fp32 ref,fp32 set);
 
+fp32 fn_delta_PidClac(pid_type_def *pid, fp32 ref, fp32 set, fp32 error_delta);
 #endif

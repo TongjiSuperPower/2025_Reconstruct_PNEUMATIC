@@ -86,7 +86,7 @@ void Chassis_Task(void const * argument){
         chassis_send_num ++;
         fn_ctrl_DM_motor(0,0,0,0,gimbal_motor4310_data[0].target_torque);
         //fn_ctrl_DM_motor(0,0,0,0,0);
-        fn_cmd_CAN2TriggerMotor(trigger_motor3508_data[0].given_current,0,0,0);
+        
         //fn_cmd_CAN2TriggerMotor(0,0,0,0);
 
         if(send_num > 49){
@@ -203,6 +203,9 @@ void fn_ChassisMode(void){
     if(!IF_RC_SW2_MID){
         if(IF_RC_SW2_UP && gimbal_data.gimbal_behaviour != GIMBAL_INIT){
             chassis_move_data.chassis_mode = chassis_follow;
+        }
+        if(IF_RC_SW2_UP && ctl.rc.k0 >= 1500 && gimbal_data.gimbal_behaviour != GIMBAL_INIT){
+            chassis_move_data.chassis_mode = chassis_spin;
         }
     }
 
@@ -505,6 +508,10 @@ void fn_ChassisMove(void){
         chassis_move_data.w_set = w_match;
 
         //平移速度
+        if(IF_RC_SW2_UP){
+            chassis_move_data.vx_set = (float)(ctl.rc.ch1 - 1024) / 660.0f * SpinV;
+            chassis_move_data.vy_set = (float)(ctl.rc.ch0 - 1024) / 660.0f * SpinV;
+        }
         if(IF_RC_SW2_MID){
             if(infact_Pmax <= 150.0f){
                 if(!(IF_KEY_PRESSED_W || IF_KEY_PRESSED_S || IF_KEY_PRESSED_A || IF_KEY_PRESSED_D)){

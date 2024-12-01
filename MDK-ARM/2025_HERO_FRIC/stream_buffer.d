@@ -1,8 +1,8 @@
 2025_hero_fric\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c
-2025_hero_fric\stream_buffer.o: E:\keil\ARM\ARMCC\Bin\..\include\stdint.h
-2025_hero_fric\stream_buffer.o: E:\keil\ARM\ARMCC\Bin\..\include\string.h
+2025_hero_fric\stream_buffer.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+2025_hero_fric\stream_buffer.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 2025_hero_fric\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-2025_hero_fric\stream_buffer.o: E:\keil\ARM\ARMCC\Bin\..\include\stddef.h
+2025_hero_fric\stream_buffer.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 2025_hero_fric\stream_buffer.o: ../Core/Inc/FreeRTOSConfig.h
 2025_hero_fric\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 2025_hero_fric\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
