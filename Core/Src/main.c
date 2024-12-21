@@ -21,6 +21,7 @@
 #include "cmsis_os.h"
 #include "can.h"
 #include "dma.h"
+#include "rtc.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
@@ -105,6 +106,9 @@ int main(void)
   MX_TIM5_Init();
   MX_TIM4_Init();
   MX_TIM10_Init();
+  MX_TIM1_Init();
+  MX_RTC_Init();
+  MX_TIM8_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_3);
   HAL_TIM_PWM_Start(&htim5,TIM_CHANNEL_1);

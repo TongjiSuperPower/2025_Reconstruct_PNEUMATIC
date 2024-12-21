@@ -79,7 +79,7 @@ void Chassis_Task(void const * argument){
         cap_send_num++;
         //发送电流
         if(chassis_send_num > 1){
-            fn_cmd_CAN2ChassisMotor(chassis_motor3508_data[0].given_current,chassis_motor3508_data[1].given_current,chassis_motor3508_data[2].given_current,chassis_motor3508_data[3].given_current);
+            //fn_cmd_CAN2ChassisMotor(chassis_motor3508_data[0].given_current,chassis_motor3508_data[1].given_current,chassis_motor3508_data[2].given_current,chassis_motor3508_data[3].given_current);
             //fn_cmd_CAN2ChassisMotor(0,0,0,0);
             chassis_send_num = 0;
         }

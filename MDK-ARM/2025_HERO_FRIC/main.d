@@ -29,6 +29,8 @@
 2025_hero_fric\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
 2025_hero_fric\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 2025_hero_fric\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
+2025_hero_fric\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rtc.h
+2025_hero_fric\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rtc_ex.h
 2025_hero_fric\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 2025_hero_fric\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 2025_hero_fric\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
@@ -49,6 +51,7 @@
 2025_hero_fric\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
 2025_hero_fric\main.o: ../Core/Inc/can.h
 2025_hero_fric\main.o: ../Core/Inc/dma.h
+2025_hero_fric\main.o: ../Core/Inc/rtc.h
 2025_hero_fric\main.o: ../Core/Inc/spi.h
 2025_hero_fric\main.o: ../Core/Inc/tim.h
 2025_hero_fric\main.o: ../Core/Inc/usart.h

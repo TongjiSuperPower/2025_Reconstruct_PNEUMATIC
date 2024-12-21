@@ -28,6 +28,8 @@
 2025_hero_fric\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
 2025_hero_fric\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 2025_hero_fric\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
+2025_hero_fric\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rtc.h
+2025_hero_fric\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rtc_ex.h
 2025_hero_fric\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 2025_hero_fric\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 2025_hero_fric\stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h

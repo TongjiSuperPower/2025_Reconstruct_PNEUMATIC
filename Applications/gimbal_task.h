@@ -33,20 +33,20 @@
 
 //GYRO控制模式
 //Yaw陀螺仪双环外环pid参数-达妙
-#define GimbalPid1Yaw_kp 15.0f        //15 0 150
+#define GimbalPid1Yaw_kp 20.0f        //15 0 150
 #define GimbalPid1Yaw_ki 0.0f       //0.001
-#define GimbalPid1Yaw_kd 150.0f
+#define GimbalPid1Yaw_kd 2.8f
 
-#define GimbalPid2Yaw_kp 1.0f
-#define GimbalPid2Yaw_ki 0.0f
-#define GimbalPid2Yaw_kd 25.0f
+#define GimbalPid2Yaw_kp 3.9f
+#define GimbalPid2Yaw_ki 0.02f
+#define GimbalPid2Yaw_kd 0.65f
 
 //Pitch陀螺仪双环外环pid参数-小米
-#define GimbalPid1Pitch_kp 32.0f
+#define GimbalPid1Pitch_kp 45.0f
 #define GimbalPid1Pitch_ki 0.001f
-#define GimbalPid1Pitch_kd 90.0f
+#define GimbalPid1Pitch_kd 0.0f
 
-#define GimbalPid2Pitch_kp 1.1f
+#define GimbalPid2Pitch_kp 1.59f
 #define GimbalPid2Pitch_ki 0.0f
 #define GimbalPid2Pitch_kd 20.0f
 
@@ -72,8 +72,8 @@
 //达妙最大输出
 #define GimbalPidYawMinOut -10.0f
 #define GimbalPidYawMaxOut 10.0f
-#define GimbalPidYawMinIOut -3.0f
-#define GimbalPidYawMaxIOut 3.0f
+#define GimbalPidYawMinIOut -1.0f
+#define GimbalPidYawMaxIOut 1.0f
 //小米最大输出
 #define GimbalPidPitMinOut -12.0f
 #define GimbalPidPitMaxOut 12.0f

@@ -5,6 +5,7 @@
 "2025_hero_fric\freertos.o"
 "2025_hero_fric\can.o"
 "2025_hero_fric\dma.o"
+"2025_hero_fric\rtc.o"
 "2025_hero_fric\spi.o"
 "2025_hero_fric\tim.o"
 "2025_hero_fric\usart.o"
@@ -25,6 +26,8 @@
 "2025_hero_fric\stm32f4xx_hal_cortex.o"
 "2025_hero_fric\stm32f4xx_hal.o"
 "2025_hero_fric\stm32f4xx_hal_exti.o"
+"2025_hero_fric\stm32f4xx_hal_rtc.o"
+"2025_hero_fric\stm32f4xx_hal_rtc_ex.o"
 "2025_hero_fric\stm32f4xx_hal_spi.o"
 "2025_hero_fric\stm32f4xx_hal_tim.o"
 "2025_hero_fric\stm32f4xx_hal_tim_ex.o"
@@ -67,6 +70,7 @@
 "2025_hero_fric\bsp_spi.o"
 "2025_hero_fric\bsp_tim.o"
 "2025_hero_fric\bsp_usart.o"
+"2025_hero_fric\bsp_servo_pwm.o"
 --strict --scatter "2025_HERO_FRIC\2025_HERO_FRIC.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

@@ -103,9 +103,9 @@ void Gimbal_Task(void const * argument){
 				
 				
         
-		motor_mi_controlmode(gimbal_motormi_data[0].given_current,0,0,0,0);
-        //motor_mi_controlmode(0,0,0,0,0);
-		fn_cmd_CAN2TriggerMotor(shoot_control.given_current,0,0,0);		
+		//motor_mi_controlmode(gimbal_motormi_data[0].given_current,0,0,0,0);
+        
+		fn_cmd_CAN2TriggerMotor(0,0,shoot_control.given_current,0);		
 
 
 
@@ -180,7 +180,7 @@ void fn_GimbalMotorInit(void){
     gimbal_motor4310_data[0].round_num = 0;
     gimbal_motor4310_data[0].target_angle = 0.0f;
     gimbal_motor4310_data[0].target_torque = 0.0f;
-    gimbal_motor4310_data[0].offecd_angle = -1.89034f;
+    gimbal_motor4310_data[0].offecd_angle = 0.335507f;
 																			
 
     gimbal_motor4310_data[0].double_pid_mid = 0.0f;
