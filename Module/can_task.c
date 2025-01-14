@@ -6,6 +6,7 @@
 #include "filter.h"
 #include "supercap_task.h"
 #include "gimbal_task.h"
+#include "cmsis_os.h"
 
 HAL_StatusTypeDef can1_flag;
 HAL_StatusTypeDef can2_flag;
@@ -225,16 +226,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 	    	switch (rx_header.StdId)
 	    	{
 		    
-	    		case CAN_3508_FRICL_ID:
-                case CAN_3508_FRICR_ID:
-	    		case CAN_3508_FRICU_ID:
-	    		{
-	    			static uint8_t i = 0;
-	    			i = rx_header.StdId - CAN_3508_FRICL_ID;
-	    			get_motor_measure(&gimbal_motor3508_measure[i], rx_data);
-	    			fn_GimbalMotor3508Data(i);
-	    			break;
-	    		}
+	    		
             
                 case CAN_AUTOAIM_ID:
 	    		{
@@ -423,6 +415,7 @@ void init_cybergear(uint8_t mode)
     txMsg.DLC = 0x08;           //配置CAN发送：数据长度
     
 	set_mode_cybergear(mode);//设置电机模式
+	vTaskDelay(1);
 	start_cybergear();        //使能电机
 }
 

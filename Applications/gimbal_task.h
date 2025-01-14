@@ -10,19 +10,19 @@
 
 //ENCODE控制模式
 //yaw轴角度双环外环
-#define GimbalMotor4310PosPid1_Yaw_kp 12.0f
-#define GimbalMotor4310PosPid1_Yaw_ki 0.0f
-#define GimbalMotor4310PosPid1_Yaw_kd 5.0f
+#define GimbalMotor4310PosPid1_Yaw_kp 10.0f  //12.0f		//3.4f
+#define GimbalMotor4310PosPid1_Yaw_ki 0.0f		//0.02f
+#define GimbalMotor4310PosPid1_Yaw_kd 0.0f  //5.0f		//0.65f
 //yaw轴角度双环内环
 #define GimbalMotor4310PosPid2_Yaw_kp 1.0f
 #define GimbalMotor4310PosPid2_Yaw_ki 0.0f
-#define GimbalMotor4310PosPid2_Yaw_kd 5.0f
+#define GimbalMotor4310PosPid2_Yaw_kd 0.0f
 //pitch轴角度双环外环
 #define GimbalMotormiPosPid1_Pit_kp 7.0f
-#define GimbalMotormiPosPid1_Pit_ki 0.001f
-#define GimbalMotormiPosPid1_Pit_kd 2.0f
+#define GimbalMotormiPosPid1_Pit_ki 0.03f
+#define GimbalMotormiPosPid1_Pit_kd 4.0f
 //pitch轴角度双环内环
-#define GimbalMotormiPosPid2_Pit_kp 1.1f
+#define GimbalMotormiPosPid2_Pit_kp 2.3f
 #define GimbalMotormiPosPid2_Pit_ki 0.0f
 #define GimbalMotormiPosPid2_Pit_kd 0.0f
 //PID输出限制
@@ -37,22 +37,26 @@
 #define GimbalPid1Yaw_ki 0.0f       //0.001
 #define GimbalPid1Yaw_kd 2.8f
 
-#define GimbalPid2Yaw_kp 3.9f
-#define GimbalPid2Yaw_ki 0.02f
-#define GimbalPid2Yaw_kd 0.65f
+#define GimbalPid2Yaw_kp 3.4f		//20.0f  //3.9
+#define GimbalPid2Yaw_ki 0.02f	//0.0f
+#define GimbalPid2Yaw_kd 0.65		//2.8f
 
 //Pitch陀螺仪双环外环pid参数-小米
-#define GimbalPid1Pitch_kp 45.0f
-#define GimbalPid1Pitch_ki 0.001f
+#define GimbalPid1Pitch_kp 45.0f //45.0f
+#define GimbalPid1Pitch_ki 0.03f  //0.04f
 #define GimbalPid1Pitch_kd 0.0f
+#define GimbalPid1PitchMaxOut 100.0f
+#define GimbalPid1PitchMinOut -100.0f
+#define GimbalPid1PitchMaxIout 5.0f
+#define GimbalPid1PitchMinIOut -5.0f
 
-#define GimbalPid2Pitch_kp 1.59f
+#define GimbalPid2Pitch_kp 1.6f //1.59f
 #define GimbalPid2Pitch_ki 0.0f
-#define GimbalPid2Pitch_kd 20.0f
+#define GimbalPid2Pitch_kd 0.0f  //20.0f
 
 //自瞄控制模式
 //自瞄Yaw陀螺仪双环外环pid参数-达妙
-#define GimbalPid1YawAutoaim_kp 15.0f
+#define GimbalPid1YawAutoaim_kp 20.0f
 #define GimbalPid1YawAutoaim_ki 0.01f
 #define GimbalPid1YawAutoaim_kd 10.0f
 
@@ -61,29 +65,34 @@
 #define GimbalPid2YawAutoaim_kd 5.0f
 
 //自瞄Pitch陀螺仪双环外环pid参数-小米
-#define GimbalPid1PitchAutoaim_kp 30.0f
-#define GimbalPid1PitchAutoaim_ki 0.01f
-#define GimbalPid1PitchAutoaim_kd 20.0f
+#define GimbalPid1PitchAutoaim_kp 45.0f
+#define GimbalPid1PitchAutoaim_ki 0.03f
+#define GimbalPid1PitchAutoaim_kd 0.0f
 
-#define GimbalPid2PitchAutoaim_kp 1.1f
+#define GimbalPid2PitchAutoaim_kp 1.6f
 #define GimbalPid2PitchAutoaim_ki 0.0f
-#define GimbalPid2PitchAutoaim_kd 5.0f
+#define GimbalPid2PitchAutoaim_kd 0.0f
 
 //达妙最大输出
 #define GimbalPidYawMinOut -10.0f
 #define GimbalPidYawMaxOut 10.0f
-#define GimbalPidYawMinIOut -1.0f
-#define GimbalPidYawMaxIOut 1.0f
+#define GimbalPidYawMinIOut -3.0f
+#define GimbalPidYawMaxIOut 3.0f
+
 //小米最大输出
 #define GimbalPidPitMinOut -12.0f
 #define GimbalPidPitMaxOut 12.0f
 #define GimbalPidPitMinIOut -4.0f
 #define GimbalPidPitMaxIOut 4.0f
 
+//小米初始码盘值和限位
+#define Pitch_offset_ecd 32485
+
+
 //遥控器模式云台数据
 #define WMax 0.004f                     //rad/ms
-#define PitAngleMax 0.72                //Pitch轴限位    最大角度
-#define PitAngleMin -0.26               //Pitch轴限位    最小角度
+#define PitAngleMax 0.45f//0.6100f                //Pitch轴限位    最大角度
+#define PitAngleMin -0.2144f               //Pitch轴限位    最小角度
 
 
 //键鼠模式鼠标系数数据
@@ -94,9 +103,9 @@
 #define TurnOverColdTime 800            //ms
 
 //重力补偿力矩
-#define Tor_param 0.0f// 2.0f
+#define Tor_param  0//1.95//0//1.95f
 //重心偏移角
-#define OFFSET_ANGLE -0.7545f               //rad
+#define OFFSET_ANGLE 0.0f//-0.7545f               //rad
 
 //云台状态机参数
 typedef enum{

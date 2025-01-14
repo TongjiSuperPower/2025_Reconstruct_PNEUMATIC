@@ -153,26 +153,26 @@ void fn_Shoot_set_mode(void)
 	shoot_control.photogate = (photogate_state == GPIO_PIN_SET);
 	
 	//右拨杆拨到下档则down
-	if(IF_RC_SW1_DOWN)
+	if(IF_RC_SW2_DOWN)
 	{
 		shoot_control.shoot_mode = SHOOT_STOP;
 	}
 	//整车不处在down模式
 	else
 	{
-		if(IF_RC_SW1_UP)//遥控器模式
+		if(IF_RC_SW2_UP)//遥控器模式
 		{
 			//左拨杆中到上模式切换
-			if(IF_RC_SW2_UP && !switch_is_up(last_s) && shoot_control.shoot_mode == SHOOT_STOP)
+			if(IF_RC_SW1_UP && !switch_is_up(last_s) && shoot_control.shoot_mode == SHOOT_STOP)
 			{
 				shoot_control.shoot_mode = SHOOT_READY;
 			}
-			else if(IF_RC_SW2_UP && !switch_is_up(last_s) && shoot_control.shoot_mode != SHOOT_STOP)
+			else if(IF_RC_SW1_UP && !switch_is_up(last_s) && shoot_control.shoot_mode != SHOOT_STOP)
 			{
 				shoot_control.shoot_mode = SHOOT_STOP;
 			}
 		}
-		else if(IF_RC_SW1_MID)//键鼠模式
+		else if(IF_RC_SW2_MID)//键鼠模式
 		{
 			shoot_control.shoot_mode = SHOOT_READY;
 		}
@@ -189,7 +189,7 @@ void fn_Shoot_set_mode(void)
 		shoot_cooling_time++;
 
 		// 在READY，并且拨盘停转、缸闭合的情况下如果下拨左拨杆，进入射击模式
-		if(((IF_RC_SW2_DOWN && !switch_is_down(last_s) && IF_RC_SW1_UP) ||(shoot_control.shoot_enable_flag && IF_RC_SW1_MID))
+		if(((IF_RC_SW1_DOWN && !switch_is_down(last_s) && IF_RC_SW2_UP) ||(shoot_control.shoot_enable_flag && IF_RC_SW2_MID))
 		&& shoot_control.shoot_mode == SHOOT_READY && shoot_control.cylinder_mode == CYLIN_CLOSE && shoot_control.trigger_mode == TRIGGER_DOWN)
 		{
 			cooling_heat = ext_power_heat_data.shooter_42mm_barrel_heat;	//当前枪口热量
@@ -323,7 +323,7 @@ void fn_Shoot_set_mode(void)
 		shoot_control.reverse_time = 0;
 	}	
 
-	last_s = ctl.rc.s2;	//上一时刻的左拨杆值
+	last_s = ctl.rc.s1;	//上一时刻的左拨杆值
 	shoot_control.last_photogate = shoot_control.photogate;
 	shoot_control.last_v_key = shoot_control.v_key;
 

@@ -50,7 +50,7 @@ void Buzzer_Task(void const * argument){
 	vTaskDelay(200);
 	
 	//启动提示音
-	//fn_BuzzerPrompt();
+	fn_BuzzerPrompt();
 
 	//关闭提示音
 	fn_BuzzerClose();

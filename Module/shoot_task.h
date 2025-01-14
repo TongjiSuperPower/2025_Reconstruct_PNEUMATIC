@@ -140,7 +140,7 @@ typedef struct
 	uint16_t cylin_close2open_count;
 	uint16_t quival_open2close_count;
 	uint16_t shoot_action_plus_count;
-	uint8_t angle_change_flag;
+	uint8_t angle_change_flag;  //为0会执行一次目标角度设定，之后立即改为1，此后不会重复设定
 	uint8_t reverse_angle_change_flag;
 	uint8_t cylinder_cmd;
 	uint8_t quival_cmd;

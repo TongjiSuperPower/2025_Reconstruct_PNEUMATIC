@@ -12,9 +12,12 @@
 #define torque_coefficient 2.6378e-04f      //0.3*20/16384=3.6621e-04f
 #endif
 
-#define K1 2.892f
-#define K2 0.00821f
-#define K3 2.891f
+// #define K1 2.892f
+// #define K2 0.00821f
+// #define K3 2.891f
+#define K1 2.866f
+#define K2 0.00851f
+#define K3 2.6742f
 
 #define SPEED_CON 30
 #define W_CON 30

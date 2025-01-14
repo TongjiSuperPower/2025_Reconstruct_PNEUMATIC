@@ -69,3 +69,4 @@
 2025_hero_fric\gimbal_task.o: ../Module/shoot_task.h
 2025_hero_fric\gimbal_task.o: ../Module/plot.h
 2025_hero_fric\gimbal_task.o: ..\Applications\chassis_task.h
+2025_hero_fric\gimbal_task.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

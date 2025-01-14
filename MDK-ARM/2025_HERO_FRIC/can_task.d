@@ -51,3 +51,17 @@
 2025_hero_fric\can_task.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 2025_hero_fric\can_task.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 2025_hero_fric\can_task.o: ../Module/protocol.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+2025_hero_fric\can_task.o: ../Core/Inc/FreeRTOSConfig.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
+2025_hero_fric\can_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h

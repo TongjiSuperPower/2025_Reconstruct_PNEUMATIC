@@ -32,6 +32,8 @@ uint16_t spin_w_count;
 uint8_t spin_w_flag;
 //当前底盘最大功率观测值
 fp32 relative_Pmax;
+//进入吊射模式底盘init计时
+uint16_t chassis_init_time;
 
 
 //底盘初始化函数
@@ -48,7 +50,7 @@ void fn_ChassisMove(void);
 
 void Chassis_Task(void const * argument){
 
-    vTaskDelay(500);
+    vTaskDelay(400);
 
     //电机底盘初始化
     fn_ChassisInit();
@@ -79,33 +81,40 @@ void Chassis_Task(void const * argument){
         cap_send_num++;
         //发送电流
         if(chassis_send_num > 1){
-            //fn_cmd_CAN2ChassisMotor(chassis_motor3508_data[0].given_current,chassis_motor3508_data[1].given_current,chassis_motor3508_data[2].given_current,chassis_motor3508_data[3].given_current);
+            fn_cmd_CAN2ChassisMotor(chassis_motor3508_data[0].given_current,chassis_motor3508_data[1].given_current,chassis_motor3508_data[2].given_current,chassis_motor3508_data[3].given_current);
             //fn_cmd_CAN2ChassisMotor(0,0,0,0);
             chassis_send_num = 0;
         }
         chassis_send_num ++;
         fn_ctrl_DM_motor(0,0,0,0,gimbal_motor4310_data[0].target_torque);
+        
+        
         //fn_ctrl_DM_motor(0,0,0,0,0);
         
         //fn_cmd_CAN2TriggerMotor(0,0,0,0);
 
-        if(send_num > 49){
+        if(send_num > 9){
+            plot3(ext_robot_status.chassis_power_limit,Pin,ext_power_heat_data.chassis_power);
+            //plot2(INS_eulers[0], gimbal_data.gyro_pit_target_angle);
+            //plot2(gimbal_data.f_GimbalPitPidMid, INS_gyro[0]);
+            //plot2(gimbal_motor4310_data[0].target_angle, gimbal_motor4310_data[0].position);
+            //plot2(gimbal_motor4310_data[0].double_pid_mid, gimbal_motor4310_data[0].velocity);
 			//plot4(gimbal_data.gyro_yaw_target_angle*57.3f,gimbal_data.gyro_pit_target_angle*57.3f,INS_eulers[0]*57.3f,INS_eulers[1]*57.3f);
-					plot6(ext_power_heat_data.chassis_power,infact_Pmax,ext_power_heat_data.buffer_energy,Pin,w_match,K);
-					//plot3(INS_eulers[0],gimbal_motor4310_data[0].position,fn_RadFormat(INS_eulers[0]-gimbal_motor4310_data[0].position));
-					//plot6(ext_power_heat_data.chassis_power,infact_Pmax,ext_power_heat_data.buffer_energy,cap_data.Capacity,cap_data.Cell_Power,cap_data.Cap_Power);
-					//plot5(ext_power_heat_data.chassis_power,infact_Pmax,ext_power_heat_data.buffer_energy,cap_data.Capacity / 100.0f,cap_num);
-			//plot5(ext_power_heat_data.shooter_17mm_1_barrel_heat,ext_robot_status.shooter_barrel_heat_limit,ext_robot_shoot_data.initial_speed
-			      //,trigger_motor2006_data[0].relative_raw_speed,trigger_motor2006_data[0].target_speed);
-					//plot3(ext_power_heat_data.shooter_17mm_1_barrel_heat,ext_robot_status.shooter_barrel_heat_limit,ext_robot_status.shooter_barrel_cooling_value);
+			//plot6(ext_power_heat_data.chassis_power,infact_Pmax,ext_power_heat_data.buffer_energy,Pin,w_match,K);
+            //plot3(INS_eulers[0],gimbal_motor4310_data[0].position,fn_RadFormat(INS_eulers[0]-gimbal_motor4310_data[0].position));
+            //plot6(ext_power_heat_data.chassis_power,infact_Pmax,ext_power_heat_data.buffer_energy,cap_data.Capacity,cap_data.Cell_Power,cap_data.Cap_Power);
+            //plot5(ext_power_heat_data.chassis_power,infact_Pmax,ext_power_heat_data.buffer_energy,cap_data.Capacity / 100.0f,cap_num);
+            //plot5(ext_power_heat_data.shooter_17mm_1_barrel_heat,ext_robot_status.shooter_barrel_heat_limit,ext_robot_shoot_data.initial_speed
+            //,trigger_motor2006_data[0].relative_raw_speed,trigger_motor2006_data[0].target_speed);
+            //plot3(ext_power_heat_data.shooter_17mm_1_barrel_heat,ext_robot_status.shooter_barrel_heat_limit,ext_robot_status.shooter_barrel_cooling_value);
 			//plot6(gimbal_motor3508_data[0].relative_raw_speed,-gimbal_motor3508_data[1].relative_raw_speed,shoot_single_time_count,shooting_single_count,speed,trigger_motor2006_block_flag);
 			//plot4(-chassis_motor3508_data[0].relative_raw_speed,chassis_motor3508_data[1].relative_raw_speed,
-			    //-chassis_motor3508_data[2].relative_raw_speed,chassis_motor3508_data[3].relative_raw_speed);
+            //-chassis_motor3508_data[2].relative_raw_speed,chassis_motor3508_data[3].relative_raw_speed);
 			//plot1(gimbal_motor6020_data[0].relative_raw_speed);
-					//plot5(-gimbal_motor3508_data[0].relative_raw_speed,gimbal_motor3508_data[1].relative_raw_speed,-gimbal_motor3508_data[2].relative_raw_speed,FricSpeed,shoot_data.infact_shoot_speed);
-					//plot3(trigger_motor3508_data[0].target_angle,trigger_motor3508_data[0].relative_raw_angle,shoot_data.infact_shoot_speed);
-          //plot2(chassis_motor3508_data[0].relative_raw_speed, 0);  
-					//plot4(INS_eulers[0],gimbal_data.gyro_pit_target_angle,INS_eulers[1],gimbal_data.gyro_yaw_target_angle);
+            //plot5(-gimbal_motor3508_data[0].relative_raw_speed,gimbal_motor3508_data[1].relative_raw_speed,-gimbal_motor3508_data[2].relative_raw_speed,FricSpeed,shoot_data.infact_shoot_speed);
+            //plot3(trigger_motor3508_data[0].target_angle,trigger_motor3508_data[0].relative_raw_angle,shoot_data.infact_shoot_speed);
+            //plot2(chassis_motor3508_data[0].relative_raw_speed, 0);  
+            //plot4(INS_eulers[0],gimbal_data.gyro_pit_target_angle,INS_eulers[1],gimbal_data.gyro_yaw_target_angle);
         send_num = 0;
 				}
         send_num++;
@@ -219,14 +228,15 @@ void fn_ChassisMode(void){
         if(!IF_KEY_PRESSED_SHIFT && chassis_move_data.chassis_mode != chassis_not_follow && gimbal_data.gimbal_behaviour != GIMBAL_INIT){
             chassis_move_data.chassis_mode = chassis_follow;
         }
-        //按下B进入吊射模式则固定底盘掉底盘
+        //按下CTRL进入吊射模式则固定底盘掉底盘
         if(IF_KEY_PRESSED_CTRL && gimbal_data.gimbal_behaviour != GIMBAL_INIT && chassis_move_data.chassis_mode != chassis_not_follow && chassis_mode_time == 0){
             chassis_move_data.chassis_mode = chassis_not_follow;
             chassis_mode_time = 500;
+            chassis_init_time = 0;
         }
         if(IF_KEY_PRESSED_CTRL && gimbal_data.gimbal_behaviour != GIMBAL_INIT && chassis_move_data.chassis_mode == chassis_not_follow && chassis_mode_time == 0){
             chassis_move_data.chassis_mode = chassis_follow;
-            chassis_mode_time = 500;
+            chassis_mode_time = 500;            
         }
         //SHIFT放在后面保证在任何模式下按下SHIFT后都是小陀螺模式
         if(IF_KEY_PRESSED_SHIFT && gimbal_data.gimbal_behaviour != GIMBAL_INIT){
@@ -428,7 +438,7 @@ void fn_ChassisMove(void){
         else{
             infact_Pmax = ext_robot_status.chassis_power_limit;
         }
-        count_Pmax = fn_level_power_limit(infact_Pmax,ext_power_heat_data.buffer_energy);
+        count_Pmax = fn_level_power_limit(infact_Pmax,ext_power_heat_data.buffer_energy);   //分级控制功率
         fn_low_filter(&filter_Pmax,count_Pmax,0.15f);
         fn_chassis_power_control(&chassis_motor3508_data[0],&chassis_motor3508_data[1],&chassis_motor3508_data[2],&chassis_motor3508_data[3],filter_Pmax);
         
@@ -672,9 +682,24 @@ void fn_ChassisMove(void){
 
     //吊射模式
     if(chassis_move_data.chassis_mode == chassis_not_follow){
+        if(chassis_init_time < 1000){
+            chassis_init_time++;
+        }
+        if(chassis_init_time < 1000){
+            //底盘跟随角速度
+            chassis_move_data.w_set = -fn_PidClacAngle(&chassis_move_data.motor_pid1,gimbal_motor4310_data[0].position,chassis_move_data.chassis_relative_angle_set + PI/4);
+            //中心死区
+            if(-ZeroW < chassis_move_data.w_set && chassis_move_data.w_set < ZeroW){
+                chassis_move_data.w_set = 0.0f;
+            }
+        }
+        else{
+            chassis_move_data.w_set = 0.0f;
+        }
+
         chassis_move_data.vx_filter_set = 0.0f;
         chassis_move_data.vy_filter_set = 0.0f;
-        chassis_move_data.w_set = 0.0f;
+        
 
         //底盘电机速度解算
         chassis_motor3508_data[0].target_speed = fn_WheelSpeedW1(chassis_move_data.vx_filter_set,chassis_move_data.vy_filter_set,chassis_move_data.w_set,gimbal_motor4310_data[0].position);

@@ -88,13 +88,13 @@ struct
 #define    RC_CH3_LUD_OFFSET  	(ctl.rc.ch3 - RC_CH_VALUE_OFFSET)
 
 
-/* sw1岆衵畢裝ㄛsw2岆酘畢裝 */
-#define    IF_RC_SW1_UP      (ctl.rc.s1 == RC_SW_UP)  //衵畢裝奻
-#define    IF_RC_SW1_MID     (ctl.rc.s1 == RC_SW_MID) //衵畢裝笢
-#define    IF_RC_SW1_DOWN    (ctl.rc.s1 == RC_SW_DOWN)	//衵畢裝down
-#define    IF_RC_SW2_UP      (ctl.rc.s2 == RC_SW_UP)	//酘畢裝奻
-#define    IF_RC_SW2_MID     (ctl.rc.s2 == RC_SW_MID)	//酘畢裝笢
-#define    IF_RC_SW2_DOWN    (ctl.rc.s2 == RC_SW_DOWN)	//酘畢裝down
+/* sw1岆酘畢裝ㄛsw2岆衵畢裝 */
+#define    IF_RC_SW1_UP      (ctl.rc.s1 == RC_SW_UP)  //酘畢裝奻
+#define    IF_RC_SW1_MID     (ctl.rc.s1 == RC_SW_MID) //酘畢裝笢
+#define    IF_RC_SW1_DOWN    (ctl.rc.s1 == RC_SW_DOWN)	//酘畢裝down
+#define    IF_RC_SW2_UP      (ctl.rc.s2 == RC_SW_UP)	//衵畢裝奻
+#define    IF_RC_SW2_MID     (ctl.rc.s2 == RC_SW_MID)	//衵畢裝笢
+#define    IF_RC_SW2_DOWN    (ctl.rc.s2 == RC_SW_DOWN)	//衵畢裝down
 
 #ifdef KEY_MOD_1
 
