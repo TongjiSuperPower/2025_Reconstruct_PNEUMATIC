@@ -114,6 +114,7 @@ typedef struct
 {
 	uint8_t photogate;
 	uint8_t quival_down;
+    int16_t pwm_set_f103;
 } f103_data_t;
 
 //�����������??
@@ -375,8 +376,8 @@ void fn_GimbalMotor3508Data(uint8_t i);
 
 void fn_cmd_supercap(int16_t flag, uint16_t chassis_power_limit, uint8_t chassis_output, fp32 chassis_power, uint16_t buffer_energy);
 
-//��f103���Ϳ���֡
-void fn_cmd_F103(uint8_t cylinder_push, uint8_t quick_valve_exhaust, int16_t press_time, int16_t exhaust_time);
+//发送f103命令，气缸、快排阀、PWM、排气时间
+void fn_cmd_F103(uint8_t cylinder_push, uint8_t quick_valve_exhaust, int16_t pwm_set, int16_t exhaust_time);
 
 extern HAL_StatusTypeDef can1_flag;
 extern HAL_StatusTypeDef can2_flag;

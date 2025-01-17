@@ -91,7 +91,7 @@
 
 //遥控器模式云台数据
 #define WMax 0.004f                     //rad/ms
-#define PitAngleMax 0.40f//0.45f//0.6100f                //Pitch轴限位    最大角度
+#define PitAngleMax 0.55f//0.40f//0.45f//0.6100f                //Pitch轴限位    最大角度
 #define PitAngleMin -0.1544f               //Pitch轴限位    最小角度
 
 

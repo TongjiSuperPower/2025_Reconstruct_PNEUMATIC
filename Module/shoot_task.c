@@ -71,7 +71,7 @@ void fn_shoot_control_loop(void)
 	fn_Shoot_feedback_update();	//更新拨弹轮速度和键鼠
 	fn_Shoot_action();
 	f103_control_loop();
-	fn_cmd_F103(shoot_control.cylinder_cmd, shoot_control.quival_cmd, 0, 500);
+	fn_cmd_F103(shoot_control.cylinder_cmd, shoot_control.quival_cmd, 20000, 500);//
 	
 }
 

@@ -104,6 +104,7 @@ void get_f103_data(f103_data_t *ptr, uint8_t data[8])
 {
 	ptr->photogate = data[0];
 	ptr->quival_down = (data[1]);
+	ptr->pwm_set_f103 = (data[2] << 8) | data[3];
 }
 
 // 达妙电机数据获取
@@ -231,7 +232,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
                 case CAN_AUTOAIM_ID:
 	    		{
 	    			get_autoaim_measure(&autoaim_measure, rx_data);
-	    			fn_Fp32Limit(&autoaim_measure.pitch,-0.45f,0.35f);
+	    			fn_Fp32Limit(&autoaim_measure.pitch,-PitAngleMin,PitAngleMax);
 	    			break;
 	    		}
 				case CAN_F103_ID:
@@ -270,7 +271,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 }
 
 //给f103发送控制数据
-void fn_cmd_F103(uint8_t cylinder_push, uint8_t quick_valve_exhaust, int16_t press_time, int16_t exhaust_time)
+void fn_cmd_F103(uint8_t cylinder_push, uint8_t quick_valve_exhaust, int16_t pwm_set, int16_t exhaust_time)
 {
 	uint32_t send_mail_box;
 	CAN_TxHeaderTypeDef shoot_tx_message;
@@ -282,8 +283,8 @@ void fn_cmd_F103(uint8_t cylinder_push, uint8_t quick_valve_exhaust, int16_t pre
 	uint8_t shoot_can_send_data[8];
 	shoot_can_send_data[0] = cylinder_push;
     shoot_can_send_data[1] = quick_valve_exhaust;
-    shoot_can_send_data[2] = (press_time >> 8);
-    shoot_can_send_data[3] = press_time;
+    shoot_can_send_data[2] = (pwm_set >> 8);
+    shoot_can_send_data[3] = pwm_set;
     shoot_can_send_data[4] = (exhaust_time >> 8);
     shoot_can_send_data[5] = exhaust_time;
     shoot_can_send_data[6] = 0;
