@@ -94,8 +94,11 @@ void Chassis_Task(void const * argument){
         //fn_cmd_CAN2TriggerMotor(0,0,0,0);
 
         if(send_num > 9){
-            plot3(ext_robot_status.chassis_power_limit,Pin,ext_power_heat_data.chassis_power);
-            //plot2(INS_eulers[0], gimbal_data.gyro_pit_target_angle);
+            //plot3(ext_robot_status.chassis_power_limit,Pin,ext_power_heat_data.chassis_power);
+            plot2(INS_eulers[1], gimbal_data.gyro_pit_target_angle);
+            //plot2(shoot_control.trigger_angle_set,trigger_motor3508_data[0].relative_angle_19laps);
+
+            //plot2(gimbal_data.f_GimbalPitAutoaimPidMid,INS_gyro[0]);
             //plot2(gimbal_data.f_GimbalPitPidMid, INS_gyro[0]);
             //plot2(gimbal_motor4310_data[0].target_angle, gimbal_motor4310_data[0].position);
             //plot2(gimbal_motor4310_data[0].double_pid_mid, gimbal_motor4310_data[0].velocity);

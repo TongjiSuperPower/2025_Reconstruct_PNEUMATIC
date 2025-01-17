@@ -140,7 +140,7 @@ void fn_ShootMotorInit(void)
 	fn_PidInit(&shoot_control.trigger_speed_pid,af_TriggerMotor3508_SpeedPid,TriggerMotor3508MinOut,TriggerMotor3508MaxOut,TriggerMotor3508MinIOut,TriggerMotor3508MaxIOut);
 	fn_PidInit(&shoot_control.trigger_angle_pid,af_TriggerMotor3508_AnglePid,TriggerMotor3508MinOut,TriggerMotor3508MaxOut,TriggerMotor3508MinIOut,TriggerMotor3508MaxIOut);
 	fn_PidInit(&shoot_control.trigger_action_speed_pid,af_TriggerMotor3508_ActionSpeedPid,TriggerMotor3508MinOut,TriggerMotor3508MaxOut,TriggerMotor3508MinIOut,TriggerMotor3508MaxIOut);
-	fn_PidInit(&shoot_control.trigger_action_angle_pid,af_TriggerMotor3508_ActionAnglePid,-4.0 ,4.0,TriggerMotor3508MinIOut,TriggerMotor3508MaxIOut);
+	fn_PidInit(&shoot_control.trigger_action_angle_pid,af_TriggerMotor3508_ActionAnglePid,-4.0 ,4.0,-1.0,1.0);
 	
 }
 
@@ -365,8 +365,11 @@ void fn_Shoot_action(void)
 		shoot_control.trigger_angle_pid.f_MaxOut = 4.0f;	//£ø“…Œ 
 		shoot_control.trigger_angle_pid.f_MaxIout = 0.5;
 		fn_shoot_bullet_control();
-		shoot_control.trigger_speed_set = fn_delta_PidClac(&shoot_control.trigger_action_angle_pid, fn_RadFormat(trigger_motor3508_data[0].relative_angle_19laps), fn_RadFormat(shoot_control.trigger_angle_set), shoot_control.trigger_speed);
+		
+		//shoot_control.trigger_speed_set = fn_delta_PidClac(&shoot_control.trigger_action_angle_pid, trigger_motor3508_data[0].relative_angle_19laps, fn_RadFormat(shoot_control.trigger_angle_set), shoot_control.trigger_speed);
+		shoot_control.trigger_speed_set = fn_delta_PidClac(&shoot_control.trigger_action_angle_pid, trigger_motor3508_data[0].relative_angle_19laps, shoot_control.trigger_angle_set, shoot_control.trigger_speed);
 		shoot_control.given_current = fn_PidClac(&shoot_control.trigger_action_speed_pid, shoot_control.trigger_speed, shoot_control.trigger_speed_set);
+		//shoot_control.trigger_angle_set = fn_RadFormat(shoot_control.trigger_angle_set);
 		shoot_control.angle_change_flag = 0;
 		shoot_control.reverse_angle_change_flag = 0;
 	}

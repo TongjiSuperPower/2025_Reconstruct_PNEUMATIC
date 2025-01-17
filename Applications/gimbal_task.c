@@ -159,16 +159,16 @@ void fn_GimbalInit(void){
     gimbal_data.gimbal_motor_pit_mode = GIMBAL_Motor_DOWN;
 
 
-    fn_PidInit(&gimbal_data.GimbalIMUYawPid1,af_GimbalIMUPosPid1[0],chassis_motor3508_min_out,chassis_motor3508_max_out,chassis_motor3508_min_iout,chassis_motor3508_max_iout);
+    fn_PidInit(&gimbal_data.GimbalIMUYawPid1,af_GimbalIMUPosPid1[0],-20,20,-2,2);
     fn_PidInit(&gimbal_data.GimbalIMUYawPid2,af_GimbalIMUPosPid2[0],GimbalPidYawMinOut,GimbalPidYawMaxOut,GimbalPidYawMinIOut,GimbalPidYawMaxIOut);
 
     fn_PidInit(&gimbal_data.GimbalIMUPitPid1,af_GimbalIMUPosPid1[1],GimbalPid1PitchMinOut,GimbalPid1PitchMaxOut,GimbalPid1PitchMinIOut,GimbalPid1PitchMaxIout);
     fn_PidInit(&gimbal_data.GimbalIMUPitPid2,af_GimbalIMUPosPid2[1],GimbalPidPitMinOut,GimbalPidPitMaxOut,GimbalPidPitMinIOut,GimbalPidPitMaxIOut);
 
-    fn_PidInit(&gimbal_data.GimbalIMUYawAutoaimPid1,af_GimbalIMUPosAutoaimPid1[0],chassis_motor3508_min_out,chassis_motor3508_max_out,chassis_motor3508_min_iout,chassis_motor3508_max_iout);
+    fn_PidInit(&gimbal_data.GimbalIMUYawAutoaimPid1,af_GimbalIMUPosAutoaimPid1[0],-20,20,-2,2);
     fn_PidInit(&gimbal_data.GimbalIMUYawAutoaimPid2,af_GimbalIMUPosAutoaimPid2[0],GimbalPidYawMinOut,GimbalPidYawMaxOut,GimbalPidYawMinIOut,GimbalPidYawMaxIOut);
 
-    fn_PidInit(&gimbal_data.GimbalIMUPitAutoaimPid1,af_GimbalIMUPosAutoaimPid1[1],chassis_motor3508_min_out,chassis_motor3508_max_out,chassis_motor3508_min_iout,chassis_motor3508_max_iout);
+    fn_PidInit(&gimbal_data.GimbalIMUPitAutoaimPid1,af_GimbalIMUPosAutoaimPid1[1],-10,10,-1,1);
     fn_PidInit(&gimbal_data.GimbalIMUPitAutoaimPid2,af_GimbalIMUPosAutoaimPid2[1],GimbalPidPitMinOut,GimbalPidPitMaxOut,GimbalPidPitMinIOut,GimbalPidPitMaxIOut);
 }
 
@@ -238,7 +238,7 @@ void fn_get_pitch_zero_encode(void){
             delay = 0;
         }
         if(delay == 200){
-            gimbal_motormi_data[0].offecd_ecd = gimbal_motormi_measure[0].ecd - 2045;
+            gimbal_motormi_data[0].offecd_ecd = gimbal_motormi_measure[0].ecd - 1650;
         }
         vTaskDelay(1);
     }
@@ -420,7 +420,7 @@ void fn_GimbalMove(void){
                 }
                 else{
                     gimbal_data.gyro_yaw_angle_add = -MOUSE_X_MOVE_SPEED * WCoef;
-                    gimbal_data.gyro_pit_angle_add = -                                  MOUSE_Y_MOVE_SPEED * WCoef;
+                    gimbal_data.gyro_pit_angle_add = -MOUSE_Y_MOVE_SPEED * WCoef;
                 }
                 //掉头冷却减少
                 if(turnover_cold_time > 0){
@@ -465,34 +465,41 @@ void fn_GimbalMove(void){
                                                         + sin(PI / 2.0f - OFFSET_ANGLE + gimbal_motormi_data[0].relative_raw_angle) * Tor_param;
             }
 
-            //自瞄控云台
-            if(gimbal_data.gimbal_behaviour == GIMBAL_AUTO){
-                if(!IF_KEY_PRESSED_B && !IF_KEY_PRESSED_V){
-                    shoot_mode_flag = 1;
-                }
-                else{
-                    /* if(IF_KEY_PRESSED_B){
-                        shoot_mode_flag = 2;
-                    } */
-                    /* if(IF_KEY_PRESSED_V){
-                        shoot_mode_flag = 3;
-                    } */
-                }
+        //自瞄控云台
+        if(gimbal_data.gimbal_behaviour == GIMBAL_AUTO){
+            shoot_mode_flag = 1;
+            
 
-                //赋予自瞄坐标
-                if(autoaim_measure.vision_state == 1){
-                    gimbal_data.gyro_yaw_target_angle = autoaim_measure.yaw;
-                    gimbal_data.gyro_pit_target_angle = autoaim_measure.pitch;
-                }
-
-                //解算自瞄模式下两轴电流
-                gimbal_data.f_GimbalYawAutoaimPidMid = fn_PidClacAngle(&gimbal_data.GimbalIMUYawAutoaimPid1,INS_eulers[0], gimbal_data.gyro_yaw_target_angle);
-                gimbal_motor4310_data[0].target_torque = fn_PidClac(&gimbal_data.GimbalIMUYawAutoaimPid2,INS_gyro[2],gimbal_data.f_GimbalYawAutoaimPidMid);
-
-                gimbal_data.f_GimbalPitAutoaimPidMid = fn_PidClacAngle(&gimbal_data.GimbalIMUPitAutoaimPid1,INS_eulers[1], gimbal_data.gyro_pit_target_angle);
-                gimbal_motormi_data[0].given_current = -fn_PidClac(&gimbal_data.GimbalIMUPitAutoaimPid2,INS_gyro[0],gimbal_data.f_GimbalPitAutoaimPidMid)
-                                                        + sin(PI / 2.0f - OFFSET_ANGLE + gimbal_motormi_data[0].relative_raw_angle) * Tor_param;
+            //赋予自瞄坐标
+            if(autoaim_measure.vision_state == 1){
+                gimbal_data.gyro_yaw_target_angle = autoaim_measure.yaw;
+                gimbal_data.gyro_pit_target_angle = autoaim_measure.pitch;
             }
+
+            /*加一个电控限位*/
+            if(fn_scope_judgment(gimbal_data.gyro_pit_target_angle,PitAngleMin,PitAngleMax)){
+                if(gimbal_data.gyro_pit_target_angle >PitAngleMax){
+                    gimbal_data.gyro_pit_target_angle = PitAngleMax;
+                }
+                else if(gimbal_data.gyro_pit_target_angle < PitAngleMin){
+                    gimbal_data.gyro_pit_target_angle = PitAngleMin;
+                }
+            }
+            //解算GYRO模式下两轴电流
+            gimbal_data.f_GimbalYawPidMid = fn_PidClacAngle(&gimbal_data.GimbalIMUYawPid1,INS_eulers[0], gimbal_data.gyro_yaw_target_angle);
+            gimbal_motor4310_data[0].target_torque = fn_PidClac(&gimbal_data.GimbalIMUYawPid2,INS_gyro[2],gimbal_data.f_GimbalYawPidMid);
+
+            gimbal_data.f_GimbalPitPidMid = fn_PidClacAngle(&gimbal_data.GimbalIMUPitPid1,INS_eulers[1], gimbal_data.gyro_pit_target_angle);
+            gimbal_motormi_data[0].given_current = fn_PidClac(&gimbal_data.GimbalIMUPitPid2,INS_gyro[0],gimbal_data.f_GimbalPitPidMid)
+                                                    + sin(PI / 2.0f - OFFSET_ANGLE + gimbal_motormi_data[0].relative_raw_angle) * Tor_param;
+            //解算自瞄模式下两轴电流
+            // gimbal_data.f_GimbalYawAutoaimPidMid = fn_PidClacAngle(&gimbal_data.GimbalIMUYawAutoaimPid1,INS_eulers[0], gimbal_data.gyro_yaw_target_angle);
+            // gimbal_motor4310_data[0].target_torque = fn_PidClac(&gimbal_data.GimbalIMUYawAutoaimPid2,INS_gyro[2],gimbal_data.f_GimbalYawAutoaimPidMid);
+
+            // gimbal_data.f_GimbalPitAutoaimPidMid = fn_PidClacAngle(&gimbal_data.GimbalIMUPitAutoaimPid1,INS_eulers[1], gimbal_data.gyro_pit_target_angle);
+            // gimbal_motormi_data[0].given_current = -fn_PidClac(&gimbal_data.GimbalIMUPitAutoaimPid2,INS_gyro[0],gimbal_data.f_GimbalPitAutoaimPidMid)
+            //                                         + sin(PI / 2.0f - OFFSET_ANGLE + gimbal_motormi_data[0].relative_raw_angle) * Tor_param;
+        }
 
             //不在自瞄则将自瞄PID的Iout清零，减少对后续的影响
 //            if(gimbal_data.gimbal_behaviour != GIMBAL_AUTO){

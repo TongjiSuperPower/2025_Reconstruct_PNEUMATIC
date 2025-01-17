@@ -3,7 +3,7 @@
 <title>Static Call Graph - [2025_HERO_FRIC\2025_HERO_FRIC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image 2025_HERO_FRIC\2025_HERO_FRIC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Tue Jan 14 23:15:09 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Thu Jan 16 19:09:16 2025
 <BR><P>
 <H3>Maximum Stack Usage =        480 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -821,11 +821,11 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> freertos.o(.constdata)
 </UL>
-<P><STRONG><a name="[6b]"></a>Chassis_Task</STRONG> (Thumb, 330 bytes, Stack size 8 bytes, chassis_task.o(i.Chassis_Task))
+<P><STRONG><a name="[6b]"></a>Chassis_Task</STRONG> (Thumb, 286 bytes, Stack size 8 bytes, chassis_task.o(i.Chassis_Task))
 <BR><BR>[Stack]<UL><LI>Max Depth = 336<LI>Call Chain = Chassis_Task &rArr; fn_ChassisMove &rArr; fn_WheelSpeedW4 &rArr; __hardfp_sin &rArr; __ieee754_rem_pio2 &rArr; __aeabi_d2iz
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
-<LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;plot3
+<LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;plot2
 <LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fn_ctrl_DM_motor
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fn_cmd_supercap
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fn_cmd_CAN2TriggerMotor
@@ -1593,7 +1593,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[131]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
 <LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;plot3
+<BR>[Called By]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;plot2
 </UL>
 
 <P><STRONG><a name="[168]"></a>HAL_UART_TxCpltCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_hal_uart.o(i.HAL_UART_TxCpltCallback))
@@ -2506,8 +2506,8 @@ Global Symbols
 <LI><a href="#[1b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fn_delta_PidClac
 </UL>
 
-<P><STRONG><a name="[bf]"></a>fn_GimbalInit</STRONG> (Thumb, 348 bytes, Stack size 120 bytes, gimbal_task.o(i.fn_GimbalInit))
-<BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = fn_GimbalInit &rArr; __aeabi_memcpy4
+<P><STRONG><a name="[bf]"></a>fn_GimbalInit</STRONG> (Thumb, 324 bytes, Stack size 104 bytes, gimbal_task.o(i.fn_GimbalInit))
+<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = fn_GimbalInit &rArr; __aeabi_memcpy4
 </UL>
 <BR>[Calls]<UL><LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fn_PidInit
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
@@ -2542,7 +2542,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_CAN_RxFifo0MsgPendingCallback
 </UL>
 
-<P><STRONG><a name="[c6]"></a>fn_GimbalMove</STRONG> (Thumb, 1634 bytes, Stack size 88 bytes, gimbal_task.o(i.fn_GimbalMove))
+<P><STRONG><a name="[c6]"></a>fn_GimbalMove</STRONG> (Thumb, 1664 bytes, Stack size 88 bytes, gimbal_task.o(i.fn_GimbalMove))
 <BR><BR>[Stack]<UL><LI>Max Depth = 272<LI>Call Chain = fn_GimbalMove &rArr; __hardfp_sin &rArr; __ieee754_rem_pio2 &rArr; __aeabi_d2iz
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fn_scope_judgment
@@ -2687,7 +2687,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fn_shoot_init
 </UL>
 
-<P><STRONG><a name="[1b6]"></a>fn_Shoot_action</STRONG> (Thumb, 346 bytes, Stack size 32 bytes, shoot_task.o(i.fn_Shoot_action))
+<P><STRONG><a name="[1b6]"></a>fn_Shoot_action</STRONG> (Thumb, 342 bytes, Stack size 32 bytes, shoot_task.o(i.fn_Shoot_action))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = fn_Shoot_action &rArr; fn_PidClac
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fn_PidClac
@@ -3159,8 +3159,8 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ins_Task
 </UL>
 
-<P><STRONG><a name="[b4]"></a>plot3</STRONG> (Thumb, 50 bytes, Stack size 0 bytes, plot.o(i.plot3))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = plot3 &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[b4]"></a>plot2</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, plot.o(i.plot2))
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = plot2 &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 </UL>
