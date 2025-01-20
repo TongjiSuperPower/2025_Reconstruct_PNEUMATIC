@@ -55,3 +55,6 @@ MDK-ARM/2024_INFANTRY/
 *.scvd
 *.iex
 *.ini
+MDK-ARM/.vscode/keil-assistant.log
+MDK-ARM/.vscode/keil-assistant.log
+MDK-ARM/.vscode/uv4.log.lock

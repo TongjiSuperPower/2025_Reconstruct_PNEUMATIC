@@ -96,8 +96,9 @@ void Chassis_Task(void const * argument){
         if(send_num > 9){
             //plot3(ext_robot_status.chassis_power_limit,Pin,ext_power_heat_data.chassis_power);
             //plot2(INS_eulers[1], gimbal_data.gyro_pit_target_angle);
-            plot2(INS_eulers[1], autoaim_measure.pitch);
-
+            //plot2(INS_eulers[1], gimbal_data.gyro_pit_target_angle);
+            //plot3(INS_eulers[1], gimbal_data.gyro_pit_target_angle,INS_gyro[0]);
+            plot4(INS_eulers[1], gimbal_data.gyro_pit_target_angle,INS_eulers[0], gimbal_data.gyro_yaw_target_angle);
             //plot2(shoot_control.trigger_angle_set,trigger_motor3508_data[0].relative_angle_19laps);
 
             //plot2(gimbal_data.f_GimbalPitAutoaimPidMid,INS_gyro[0]);
